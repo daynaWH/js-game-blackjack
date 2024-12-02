@@ -11,7 +11,40 @@
     <body>
         <header></header>
 
-        <main></main>
+        <main>
+            <div class="main-page">
+                <img
+                    src="images/dealer.png"
+                    alt="Dealer welcoming the player"
+                    class="dealer"
+                />
+                <p>
+                    Welcome! Click the button below to start the game. Good luck
+                    &spades;&hearts;&diams;&clubs;
+                </p>
+                <button>Start Game</button>
+            </div>
+            <div class="in-game">
+                <div class="dealer-hand">
+                    <img src="images/spades_2.svg" alt="" class="" />
+                    <img src="images/back.png" alt="" class="" />
+                    <div class="dealer-points"></div>
+                </div>
+                <div class="player-hand">
+                    <img src="images/spades_2.svg" alt="" class="" />
+                    <img src="images/spades_2.svg" alt="" class="" />
+                    <div class="player-points"></div>
+                </div>
+                <div class="game-controls">
+                    <button id="btn-hit">Hit</button>
+                    <button id="btn-stand">Stand</button>
+                </div>
+            </div>
+            <div class="results">
+                <h1 id="player-message">You win!</h1>
+                <button id="btn-play-again">Play Again</button>
+            </div>
+        </main>
 
         <footer></footer>
     </body>
