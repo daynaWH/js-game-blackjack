@@ -10,36 +10,52 @@ body {
     line-height: 1.5;
 }
 
-h1 {
+header {
+    position: fixed;
+    width: 60rem;
+    background-color: rgb(240, 248, 255, 0.5);
+    text-align: center;
+    left: 16.7%;
+}
+
+h2 {
     text-transform: uppercase;
 }
 
 button {
     font-size: 1.8rem;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 button:hover {
+    color: green;
 }
 
 /* Main Page */
 .main-page {
-    display: none;
-    height: 100vh;
+    /* height: 100vh; */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 2rem;
+    background-color: rgb(51, 100, 56);
+    width: 60rem;
+    margin: 1rem auto 0;
+    padding: 3rem 0;
+    border-radius: 1rem;
+    border: solid 1.5rem rgb(93, 66, 31);
+    box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.5);
+    color: white;
 }
 .dealer {
     width: 20rem;
 }
-
 /* In-Game Page */
 
 .in-game {
-    /* display: none; */
+    display: none;
 }
 
 .in-game img {
@@ -48,28 +64,83 @@ button:hover {
     z-index: -1;
 }
 
-.dealer-hand img:first-of-type {
-    left: 40rem;
+.dealer-hand img:nth-of-type(2) {
+    left: 35rem;
     top: 4rem;
 }
 
-.dealer-hand img:nth-of-type(2) {
-    left: 45rem;
+.dealer-hand .back,
+.dealer-hand img:nth-of-type(3) {
+    left: 40rem;
     top: 6rem;
 }
 
+.dealer-hand .back {
+    z-index: 2;
+}
+
+/* TASK: When new cards are added, move the first two cards */
 .player-hand img:first-of-type {
-    left: 40rem;
+    left: 30rem;
     bottom: 10rem;
 }
 
 .player-hand img:nth-of-type(2) {
-    left: 45rem;
+    left: 35rem;
+    bottom: 9rem;
+}
+
+.player-hand img:nth-of-type(3) {
+    left: 40rem;
     bottom: 8rem;
 }
 
+.player-hand img:nth-of-type(4) {
+    left: 45rem;
+    bottom: 7rem;
+}
+
+.player-hand img:nth-of-type(5) {
+    left: 50rem;
+    bottom: 6rem;
+}
+
+.dealer-points,
+.player-points {
+    font-size: 2rem;
+    position: absolute;
+}
+
+.dealer-points {
+    top: 5rem;
+    right: 25rem;
+}
+
+.player-points {
+    top: 24rem;
+    right: 25rem;
+}
+
+.or,
+#player-pts-value-two {
+    display: none;
+}
+
+.bust {
+    display: none;
+    position: absolute;
+    right: 10rem;
+    top: -3rem;
+    border: solid red;
+    background-color: white;
+    border-radius: 5rem;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    transform: rotate(10deg);
+}
+
 .game-controls {
-    /* display: none; */
+    display: none;
     display: flex;
     justify-content: center;
     height: 100vh;
@@ -79,10 +150,13 @@ button:hover {
 }
 
 .results {
-    /* display: none; */
-    display: flex;
+    display: none;
+    /* display: flex; */
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
+    position: absolute;
+    top: 35%;
+    left: 40%;
+    background-color: rgb(255, 255, 255);
+    padding: 2rem 5rem;
 }
