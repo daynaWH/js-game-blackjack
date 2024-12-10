@@ -64,19 +64,35 @@ button:hover {
     z-index: -1;
 }
 
+/* TASK: When new cards are added, move the first two cards */
 .dealer-hand img:nth-of-type(2) {
-    left: 35rem;
+    left: 30rem;
     top: 4rem;
 }
 
 .dealer-hand .back,
 .dealer-hand img:nth-of-type(3) {
-    left: 40rem;
-    top: 6rem;
+    left: 35rem;
+    top: 5rem;
 }
 
 .dealer-hand .back {
     z-index: 2;
+}
+
+.dealer-hand img:nth-of-type(4) {
+    left: 40rem;
+    top: 6rem;
+}
+
+.dealer-hand img:nth-of-type(5) {
+    left: 45rem;
+    top: 7rem;
+}
+
+.dealer-hand img:nth-of-type(6) {
+    left: 50rem;
+    top: 8rem;
 }
 
 /* TASK: When new cards are added, move the first two cards */
@@ -105,6 +121,11 @@ button:hover {
     bottom: 6rem;
 }
 
+.player-hand img:nth-of-type(6) {
+    left: 55rem;
+    bottom: 5rem;
+}
+
 .dealer-points,
 .player-points {
     font-size: 2rem;
@@ -122,11 +143,11 @@ button:hover {
 }
 
 .or,
-#player-pts-value-two {
+.second-pts {
     display: none;
 }
 
-.bust {
+.popup {
     display: none;
     position: absolute;
     right: 10rem;
