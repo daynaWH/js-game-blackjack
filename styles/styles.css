@@ -64,67 +64,304 @@ button:hover {
     z-index: -1;
 }
 
-/* TASK: When new cards are added, move the first two cards */
-.dealer-hand img:nth-of-type(2) {
-    left: 30rem;
+/* -------- Dealer Card --------- */
+
+/* First Card - Front */
+.dealer-hand img:first-of-type {
+    right: 45rem;
     top: 4rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
 }
 
-.dealer-hand .back,
+.dealer-hand img:first-of-type.flip {
+    transform: rotateY(360deg);
+}
+
+/* First Card - Back */
+
+.dealer-hand img:nth-of-type(2) {
+    position: fixed;
+    right: -100%;
+    top: 4rem;
+    transition: right 0.5s ease, transform 2s;
+    backface-visibility: hidden;
+}
+
+.dealer-hand img:nth-of-type(2).flip {
+    right: 45rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+/* Second Card - Front */
+
 .dealer-hand img:nth-of-type(3) {
-    left: 35rem;
+    right: 40rem;
     top: 5rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
 }
 
-.dealer-hand .back {
-    z-index: 2;
+.dealer-hand img:nth-of-type(3).flip {
+    transform: rotateY(360deg);
 }
+
+/* Second Card - Back */
 
 .dealer-hand img:nth-of-type(4) {
-    left: 40rem;
-    top: 6rem;
+    position: fixed;
+    right: -100%;
+    top: 5rem;
+    transition: right 0.5s ease, transform 2s;
 }
 
-.dealer-hand img:nth-of-type(5) {
-    left: 45rem;
-    top: 7rem;
+.dealer-hand img:nth-of-type(4).flip {
+    right: 40rem;
+    transform: rotateY(180deg);
 }
+
+/* Third Card - Front */
+.dealer-hand img:nth-of-type(5) {
+    right: 35rem;
+    top: 6rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
+}
+
+.dealer-hand img:nth-of-type(5).flip {
+    transform: rotateY(360deg);
+}
+
+/* Third Card - Back */
 
 .dealer-hand img:nth-of-type(6) {
-    left: 50rem;
-    top: 8rem;
+    position: fixed;
+    right: -100%;
+    top: 6rem;
+    transition: right 0.5s ease, transform 2s;
+    backface-visibility: hidden;
 }
 
-/* TASK: When new cards are added, move the first two cards */
-.player-hand img:first-of-type {
-    left: 30rem;
-    bottom: 10rem;
+.dealer-hand img:nth-of-type(6).flip {
+    right: 35rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
 }
+
+/* Fourth Card - Front */
+.dealer-hand img:nth-of-type(7) {
+    right: 30rem;
+    top: 7rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
+}
+
+.dealer-hand img:nth-of-type(7).flip {
+    transform: rotateY(360deg);
+}
+
+/* Fourth Card - Back */
+
+.dealer-hand img:nth-of-type(8) {
+    position: fixed;
+
+    right: -100%;
+    top: 7rem;
+    transition: right 0.5s ease, transform 2s;
+    backface-visibility: hidden;
+}
+
+.dealer-hand img:nth-of-type(8).flip {
+    right: 30rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+/* Fifth Card - Front */
+.dealer-hand img:nth-of-type(9) {
+    right: 25rem;
+    top: 8rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
+}
+
+.dealer-hand img:nth-of-type(9).flip {
+    transform: rotateY(360deg);
+}
+
+/* Fifth Card - Back */
+
+.dealer-hand img:nth-of-type(10) {
+    position: fixed;
+    right: -100%;
+    top: 8rem;
+    transition: right 0.5s ease, transform 2s;
+    backface-visibility: hidden;
+}
+
+.dealer-hand img:nth-of-type(10).flip {
+    right: 25rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+/* -------- Player Card --------- */
+
+/* First Card - Front */
+.player-hand img:first-of-type {
+    right: 45rem;
+    bottom: 10rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
+}
+
+.player-hand img:first-of-type.flip {
+    transform: rotateY(360deg);
+}
+
+/* First Card - Back */
 
 .player-hand img:nth-of-type(2) {
-    left: 35rem;
-    bottom: 9rem;
+    position: fixed;
+    right: -100%;
+    bottom: 10rem;
+    transition: right 0.5s ease, transform 2s;
+    backface-visibility: hidden;
 }
 
-.player-hand img:nth-of-type(3) {
-    left: 40rem;
-    bottom: 8rem;
+.player-hand img:nth-of-type(2).flip {
+    right: 45rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
 }
+
+/* Second card - Front */
+.player-hand img:nth-of-type(3) {
+    right: 40rem;
+    bottom: 9rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
+}
+
+.player-hand img:nth-of-type(3).flip {
+    transform: rotateY(360deg);
+}
+
+/* Second card - Back */
 
 .player-hand img:nth-of-type(4) {
-    left: 45rem;
-    bottom: 7rem;
+    position: fixed;
+    right: -100%;
+    bottom: 9rem;
+    transition: right 0.5s ease, transform 2s;
+    backface-visibility: hidden;
 }
+
+.player-hand img:nth-of-type(4).flip {
+    right: 40rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+/* Third card - Front */
 
 .player-hand img:nth-of-type(5) {
-    left: 50rem;
-    bottom: 6rem;
+    right: 35rem;
+    bottom: 8rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
 }
 
-.player-hand img:nth-of-type(6) {
-    left: 55rem;
-    bottom: 5rem;
+.player-hand img:nth-of-type(5).flip {
+    transform: rotateY(360deg);
 }
+
+/* Third Card - Back */
+
+.player-hand img:nth-of-type(6) {
+    position: fixed;
+    right: -100%;
+    bottom: 8rem;
+    transition: right 0.5s ease, transform 2s;
+    backface-visibility: hidden;
+}
+
+.player-hand img:nth-of-type(6).flip {
+    right: 35rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+/* Fourth card - Front */
+
+.player-hand img:nth-of-type(7) {
+    right: 30rem;
+    bottom: 7rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
+}
+
+.player-hand img:nth-of-type(7).flip {
+    transform: rotateY(360deg);
+}
+
+/* Fourth Card - Back */
+
+.player-hand img:nth-of-type(8) {
+    position: fixed;
+    right: -100%;
+    bottom: 7rem;
+    transition: right 0.5s ease, transform 2s;
+    backface-visibility: hidden;
+}
+
+.player-hand img:nth-of-type(8).flip {
+    right: 30rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+/* Fifth card - Front */
+
+.player-hand img:nth-of-type(9) {
+    right: 25rem;
+    bottom: 6rem;
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
+}
+
+.player-hand img:nth-of-type(9).flip {
+    transform: rotateY(360deg);
+}
+
+/* Fifth Card - Back */
+
+.player-hand img:nth-of-type(10) {
+    position: fixed;
+    right: -100%;
+    bottom: 6rem;
+    transition: right 0.5s ease, transform 2s;
+    backface-visibility: hidden;
+}
+
+.player-hand img:nth-of-type(10).flip {
+    right: 25rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+/* Points */
 
 .dealer-points,
 .player-points {
@@ -162,7 +399,7 @@ button:hover {
 
 .game-controls {
     display: none;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     height: 100vh;
     align-items: flex-end;

@@ -42,11 +42,12 @@ let dealerPts = document.getElementById("dealer-pts-value-one");
 let dealerSecondPts = document.getElementById("dealer-pts-value-two");
 let playerPts = document.getElementById("player-pts-value-one");
 let playerSecondPts = document.getElementById("player-pts-value-two");
+// const acePts = document.getElementById("ace-card");
 const textOr = document.getElementById("player-or");
-const cardBack = document.getElementById("card-back");
 
 // Buttons
 const btnStart = document.getElementById("btn-start");
+const btnControls = document.querySelector(".game-controls");
 const btnGameplay = document.querySelectorAll(".game-controls button");
 const btnHit = document.getElementById("btn-hit");
 const btnStand = document.getElementById("btn-stand");
@@ -97,16 +98,26 @@ class Player {
     // Initial Deal
     initialCards() {
         for (let i = 0; i < 2; i++) {
+            this.hand.push(deck.newDeck.shift());
             const cardsInHand = document.getElementById(`${this.role}-cards`);
             const newImg = document.createElement("img");
-            this.hand.push(deck.newDeck.shift());
+            const newBack = document.createElement("img");
+            newBack.src = `images/back.png`;
+            newBack.id = `card-back-${this.role}${i + 1}`;
             newImg.src = `images/${this.hand[i]}.svg`;
-            cardsInHand.appendChild(newImg);
-            cardsInHand.appendChild;
+
+            setTimeout(() => {
+                cardsInHand.appendChild(newImg);
+                cardsInHand.appendChild(newBack);
+                setTimeout(() => {
+                    newBack.classList.add("flip");
+                    newImg.classList.add("flip");
+                }, 500);
+            }, 1000 * i);
         }
     }
 
-    // Player's initial score
+    // Initial score
     initialScore() {
         for (let i = 0; i < this.hand.length; i++) {
             let lastDigit = this.hand[i].slice(-1);
@@ -133,11 +144,19 @@ class Player {
 
     // Functions upon adding cards to the hand
     getCard() {
+        this.hand.push(deck.newDeck.shift());
         const cardsInHand = document.getElementById(`${this.role}-cards`);
         const newImg = document.createElement("img");
-        this.hand.push(deck.newDeck.shift());
+        const newBack = document.createElement("img");
+        newBack.src = `images/back.png`;
         newImg.src = `images/${this.hand[this.hand.length - 1]}.svg`;
+
         cardsInHand.appendChild(newImg);
+        cardsInHand.appendChild(newBack);
+        setTimeout(() => {
+            newBack.classList.add("flip");
+            newImg.classList.add("flip");
+        }, 500);
     }
 
     addScore() {
@@ -190,7 +209,7 @@ function playerEnd() {
     });
 
     // The dealer opens the second card & score is displayed
-    cardBack.style.display = "none";
+    document.getElementById("card-back-dealer2").style.display = "none";
     dealerPts.innerHTML = dealer.initialScore();
 
     if (dealer.secondScore == 21) {
@@ -205,6 +224,10 @@ function playerEnd() {
         dealer.getCard();
         dealerPts.innerHTML = dealer.addScore();
     }
+
+    // Q: When hand has A
+    // 1. A + 9 -> draws card b/c dealer.score < 17 -> if dealer.secondScore > 17, stop? or still draw?
+    // 2. test if secondScore > 21, getCard() stops and score < 17 displays
 
     // If the total == 21 > display 'Blackjack' (default)
     if (dealer.score == 21) {
@@ -279,12 +302,17 @@ btnStart.addEventListener("click", function (e) {
     e.preventDefault;
     mainPage.style.display = "none";
     gamePage.style.display = "block";
+
     deck.shuffle();
 
     player.initialCards();
     playerPts.innerHTML = player.initialScore();
 
-    dealer.initialCards();
+    setTimeout(() => {
+        dealer.initialCards();
+    }, 1000);
+    // btnControls.style.display = "flex";
+
     // dealerPts.innerHTML = dealer.addScore() - Number(dealer.hand[1].slice(-1));
 
     // If the total == 21 > display 'Blackjack' & the player wins
@@ -295,6 +323,7 @@ btnStart.addEventListener("click", function (e) {
 
         playerEnd();
         showResults();
+        // setTimeout(player.win, 2000);
     }
 
     console.log(
@@ -317,6 +346,7 @@ btnHit.addEventListener("click", function () {
         document.getElementById("player-popup").style.display = "block";
         playerSecondPts.style.display = "none";
         playerEnd();
+        // setTimeout(player.win, 2000);
         showResults();
     }
     // If the total exceeds 21 > display 'Bust & the player loses
@@ -325,6 +355,7 @@ btnHit.addEventListener("click", function () {
         document.getElementById("player-popup").textContent = "Bust!";
 
         playerEnd();
+        // setTimeout(player.lose, 2000);
         showResults();
     }
 
@@ -334,6 +365,7 @@ btnHit.addEventListener("click", function () {
             document.getElementById("player-popup").style.display = "block";
             playerPts.style.display = "none";
             textOr.style.display = "none";
+            // setTimeout(player.win, 2000);
             showResults();
         }
         // If hand includes A & one exceeds 21 > remove it
@@ -374,6 +406,7 @@ btnStand.addEventListener("click", function () {
 
 //     dealer.initialCards();
 //     dealerPts.innerHTML = "??";
+//     console.log("ye");
 // }
 
 // Bug found:
@@ -382,3 +415,7 @@ btnStand.addEventListener("click", function () {
 
 // Features that can be added:
 // rules
+
+// document.getElementById("card-back").addEventListener("click", function () {
+//     document.getElementById("card-back").classList.add("flip");
+// });
