@@ -66,7 +66,7 @@ const deck = {
     newDeck: [],
 
     // Function to shuffle the deck
-    shuffle: function () {
+    shuffle() {
         for (i = 0; i < this.suits.length; i++) {
             for (j = 0; j < this.numbers.length; j++) {
                 // Generate random suit from the deck
@@ -95,6 +95,27 @@ class Player {
         this.scoreArr = [this.score, this.secondScore];
     }
 
+    default() {
+        this.hand = [];
+        this.score = 0;
+        this.secondScore = 0;
+
+        playerPts.innerHTML = 0;
+        playerPts.style.display = "inline-block";
+        playerSecondPts.style.display = "none";
+
+        dealerPts.innerHTML = "🃏";
+        dealerPts.style.display = "inline-block";
+        dealerSecondPts.style.display = "none";
+
+        document.getElementById(`${this.role}-popup`).style.display = "none";
+        const cardsInHand = document.getElementById(`${this.role}-cards`);
+        let countImg = cardsInHand.childElementCount;
+        for (let i = 0; i < countImg; i++) {
+            cardsInHand.removeChild(cardsInHand.firstChild);
+        }
+    }
+
     // Initial Deal
     initialCards() {
         for (let i = 0; i < 2; i++) {
@@ -112,7 +133,7 @@ class Player {
                 setTimeout(() => {
                     newBack.classList.add("flip");
                     newImg.classList.add("flip");
-                }, 500);
+                }, 250);
             }, 1000 * i);
         }
     }
@@ -202,6 +223,43 @@ class Player {
     }
 }
 
+function startGame() {
+    deck.newDeck = [];
+    player.default();
+    dealer.default();
+    deck.shuffle();
+
+    player.initialCards();
+
+    setTimeout(() => {
+        dealer.initialCards();
+    }, 500);
+
+    setTimeout(() => {
+        btnControls.style.display = "flex";
+        playerPts.innerHTML = player.initialScore();
+    }, 2800);
+
+    // If the total == 21 > display 'Blackjack' & the player wins
+    if (player.secondScore == 21) {
+        document.getElementById("player-popup").style.display = "block";
+        document.getElementById("player-popup").textContent = "Blackjack!";
+        playerPts.style.display = "none";
+        textOr.style.display = "none";
+
+        playerEnd();
+        showResults();
+    }
+
+    console.log(
+        deck.newDeck[0],
+        deck.newDeck[1],
+        deck.newDeck[2],
+        dealer.hand,
+        player.hand
+    ); //testing
+}
+
 function playerEnd() {
     // Disable the buttons
     btnGameplay.forEach((btnGameplay) => {
@@ -214,6 +272,7 @@ function playerEnd() {
 
     if (dealer.secondScore == 21) {
         document.getElementById("dealer-popup").style.display = "block";
+        document.getElementById("dealer-popup").textContent = "Blackjack!";
         dealerPts.style.display = "none";
         document.getElementById("dealer-or").style.display = "none";
     }
@@ -232,6 +291,7 @@ function playerEnd() {
     // If the total == 21 > display 'Blackjack' (default)
     if (dealer.score == 21) {
         document.getElementById("dealer-popup").style.display = "block";
+        document.getElementById("dealer-popup").textContent = "Blackjack!";
     }
     // If the total exceeds 21 > display 'bust'
     else if (dealer.score > 21) {
@@ -243,6 +303,7 @@ function playerEnd() {
     if (dealerSecondPts.style.display == "inline-block") {
         if (dealer.secondScore == 21) {
             document.getElementById("dealer-popup").style.display = "block";
+            document.getElementById("dealer-popup").textContent = "Blackjack!";
             dealerPts.style.display = "none";
             document.getElementById("dealer-or").style.display = "none";
         } else if (dealer.secondScore > 21) {
@@ -303,36 +364,7 @@ btnStart.addEventListener("click", function (e) {
     mainPage.style.display = "none";
     gamePage.style.display = "block";
 
-    deck.shuffle();
-
-    player.initialCards();
-    playerPts.innerHTML = player.initialScore();
-
-    setTimeout(() => {
-        dealer.initialCards();
-    }, 1000);
-    // btnControls.style.display = "flex";
-
-    // dealerPts.innerHTML = dealer.addScore() - Number(dealer.hand[1].slice(-1));
-
-    // If the total == 21 > display 'Blackjack' & the player wins
-    if (player.secondScore == 21) {
-        document.getElementById("player-popup").style.display = "block";
-        playerPts.style.display = "none";
-        textOr.style.display = "none";
-
-        playerEnd();
-        showResults();
-        // setTimeout(player.win, 2000);
-    }
-
-    console.log(
-        deck.newDeck[0],
-        deck.newDeck[1],
-        deck.newDeck[2],
-        dealer.hand,
-        player.hand
-    ); //testing
+    startGame();
 });
 
 // When the player clicks the 'Hit' button > add a card to the player hand and add the total point
@@ -344,6 +376,7 @@ btnHit.addEventListener("click", function () {
     // If the total == 21 > display 'Blackjack' & the player wins
     if (player.score == 21) {
         document.getElementById("player-popup").style.display = "block";
+        document.getElementById("player-popup").textContent = "Blackjack!";
         playerSecondPts.style.display = "none";
         playerEnd();
         // setTimeout(player.win, 2000);
@@ -363,6 +396,7 @@ btnHit.addEventListener("click", function () {
         // If hand includes A & the second Score == 21 > display 'Blackjack' & the player wins
         if (player.secondScore == 21) {
             document.getElementById("player-popup").style.display = "block";
+            document.getElementById("player-popup").textContent = "Blackjack!";
             playerPts.style.display = "none";
             textOr.style.display = "none";
             // setTimeout(player.win, 2000);
@@ -372,7 +406,8 @@ btnHit.addEventListener("click", function () {
         else if (player.secondScore > 21) {
             textOr.style.display = "none";
             playerSecondPts.style.display = "none";
-            showResults();
+
+            // showResults();
         }
     }
 });
@@ -394,28 +429,22 @@ btnStand.addEventListener("click", function () {
     showResults();
 });
 
-// btnPlayAgain.addEventListener("click", reset());
+btnPlayAgain.addEventListener("click", function (e) {
+    e.preventDefault;
+    results.style.display = "none";
 
-// function reset() {
-//     mainPage.style.display = "none";
-//     gamePage.style.display = "block";
-//     deck.shuffle();
+    // Enable buttons
+    btnGameplay.forEach((btnGameplay) => {
+        btnGameplay.disabled = false;
+    });
 
-//     player.initialCards();
-//     playerPts.innerHTML = player.initialScore();
-
-//     dealer.initialCards();
-//     dealerPts.innerHTML = "??";
-//     console.log("ye");
-// }
+    startGame();
+});
 
 // Bug found:
 // Duplicated cards displayed
-// player bust & higher than dealer - wins
+// player bust & higher than dealer -> wins
+// Issues when hands have A (ex. results)
 
 // Features that can be added:
 // rules
-
-// document.getElementById("card-back").addEventListener("click", function () {
-//     document.getElementById("card-back").classList.add("flip");
-// });

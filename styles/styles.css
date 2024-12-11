@@ -1,5 +1,9 @@
 /* Base */
 
+/* html {
+    background-color: rgb(73, 73, 73);
+} */
+
 body {
     margin: 0;
     background-color: ;
@@ -112,7 +116,7 @@ button:hover {
 /* Second Card - Back */
 
 .dealer-hand img:nth-of-type(4) {
-    position: fixed;
+    /* position: fixed; */
     right: -100%;
     top: 5rem;
     transition: right 0.5s ease, transform 2s;
@@ -372,6 +376,10 @@ button:hover {
 .dealer-points {
     top: 5rem;
     right: 25rem;
+}
+
+.dealer-points img {
+    width: 1.5rem;
 }
 
 .player-points {
