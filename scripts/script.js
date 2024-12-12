@@ -300,10 +300,6 @@ function playerEnd() {
         dealerPts.innerHTML = dealer.addScore();
     }
 
-    // Q: When hand has A
-    // 1. A + 9 -> draws card b/c dealer.score < 17 -> if dealer.secondScore > 17, stop? or still draw?
-    // 2. test if secondScore > 21, getCard() stops and score < 17 displays
-
     // If the total == 21 > display 'Blackjack' (default)
     if (dealer.score == 21) {
         document.getElementById("dealer-popup").style.display = "block";
@@ -334,42 +330,74 @@ function playerEnd() {
 
 // Compare both hands - show results at the end
 function showResults() {
-    if (
-        (player.score > 21 && dealer.score > 21) ||
-        player.score === dealer.score
-    ) {
-        setTimeout(player.tie, 2000);
-        console.log("tie");
-    } else if (
-        (player.score < dealer.score && dealer.score <= 21) ||
-        (player.score > 21 && dealer.score <= 21)
-    ) {
-        setTimeout(player.lose, 2000);
-        console.log("lose");
-    } else if (
-        player.score > dealer.score ||
-        (player.score <= 21 && dealer.score > 21)
-    ) {
-        setTimeout(player.win, 2000);
-        console.log("win");
+    if (playerSecondPts.style.display == "none") {
+        if (dealerSecondPts.style.display == "none") {
+            if (
+                (player.score > 21 && dealer.score > 21) ||
+                player.score === dealer.score
+            ) {
+                setTimeout(player.tie, 1500);
+                console.log("tie");
+            } else if (
+                (player.score < dealer.score && dealer.score <= 21) ||
+                (player.score > 21 && dealer.score <= 21)
+            ) {
+                setTimeout(player.lose, 1500);
+                console.log("lose");
+            } else if (
+                player.score > dealer.score ||
+                (player.score <= 21 && dealer.score > 21)
+            ) {
+                setTimeout(player.win, 1500);
+                console.log("win");
+            }
+        }
+        // When dealer has A = 11
+        else if ((dealerSecondPts.style.display = "inline-block")) {
+            if (player.score === dealer.secondScore) {
+                setTimeout(player.tie, 1500);
+                console.log("tie");
+            } else if (player.score < dealer.secondScore) {
+                setTimeout(player.lose, 1500);
+                console.log("lose");
+            } else if (player.score > dealer.secondScore) {
+                setTimeout(player.win, 1500);
+                console.log("win");
+            }
+        }
     }
 
-    // When either hand has an A card
-    // if (playerSecondPts.style.display == "inline-block") {
-    //     if (
-    //         player.secondScore > dealer.score ||
-    //         player.secondScore > dealer.secondScore
-    //     ) {
-    //         setTimeout(player.win, 2000);
-    //     } else if (
-    //         player.secondScore < dealer.score ||
-    //         player.secondScore < dealer.secondScore
-    //     ) {
-    //         setTimeout(player.lose, 2000);
-    //     } else if (player.secondScore == dealer.secondScore) {
-    //         setTimeout(player.tie, 2000);
-    //     }
-    // }
+    // When player has A = 11
+    else if (playerSecondPts.style.display == "inline-block") {
+        if ((dealerSecondPts.style.display = "none")) {
+            if (player.secondScore == dealer.score) {
+                setTimeout(player.tie, 1500);
+                console.log("tie");
+            } else if (
+                player.secondScore < dealer.score &&
+                dealer.score <= 21
+            ) {
+                setTimeout(player.lose, 1500);
+                console.log("lose");
+            } else if (player.secondScore > dealer.score) {
+                setTimeout(player.win, 1500);
+                console.log("win");
+            }
+        }
+        // When dealer also has A = 11
+        else if ((dealerSecondPts.style.display = "inline-block")) {
+            if (player.secondScore === dealer.secondScore) {
+                setTimeout(player.tie, 1500);
+                console.log("tie");
+            } else if (player.secondScore < dealer.secondScore) {
+                setTimeout(player.lose, 1500);
+                console.log("lose");
+            } else if (player.secondScore > dealer.secondScore) {
+                setTimeout(player.win, 1500);
+                console.log("win");
+            }
+        }
+    }
 }
 
 const dealer = new Player("dealer");
