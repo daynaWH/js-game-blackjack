@@ -174,10 +174,11 @@ class Player {
 
         cardsInHand.appendChild(newImg);
         cardsInHand.appendChild(newBack);
+
         setTimeout(() => {
             newBack.classList.add("flip");
             newImg.classList.add("flip");
-        }, 500);
+        }, 50);
     }
 
     addScore() {
@@ -223,11 +224,26 @@ class Player {
     }
 }
 
+function btnDisabled() {
+    btnGameplay.forEach((btnGameplay) => {
+        btnGameplay.disabled = true;
+    });
+}
+
+function btnEnabled() {
+    btnGameplay.forEach((btnGameplay) => {
+        btnGameplay.disabled = false;
+    });
+}
+
 function startGame() {
     deck.newDeck = [];
     player.default();
     dealer.default();
     deck.shuffle();
+
+    btnControls.style.display = "flex";
+    btnDisabled();
 
     player.initialCards();
 
@@ -236,20 +252,22 @@ function startGame() {
     }, 500);
 
     setTimeout(() => {
-        btnControls.style.display = "flex";
         playerPts.innerHTML = player.initialScore();
-    }, 2800);
+        btnEnabled();
+
+        if (player.secondScore === 21) {
+            document.getElementById("player-popup").style.display = "block";
+            document.getElementById("player-popup").textContent = "Blackjack!";
+            playerPts.style.display = "none";
+            textOr.style.display = "none";
+            console.log("21");
+
+            playerEnd();
+            showResults();
+        }
+    }, 2500);
 
     // If the total == 21 > display 'Blackjack' & the player wins
-    if (player.secondScore == 21) {
-        document.getElementById("player-popup").style.display = "block";
-        document.getElementById("player-popup").textContent = "Blackjack!";
-        playerPts.style.display = "none";
-        textOr.style.display = "none";
-
-        playerEnd();
-        showResults();
-    }
 
     console.log(
         deck.newDeck[0],
@@ -262,9 +280,7 @@ function startGame() {
 
 function playerEnd() {
     // Disable the buttons
-    btnGameplay.forEach((btnGameplay) => {
-        btnGameplay.disabled = true;
-    });
+    btnDisabled();
 
     // The dealer opens the second card & score is displayed
     document.getElementById("card-back-dealer2").style.display = "none";
@@ -434,9 +450,7 @@ btnPlayAgain.addEventListener("click", function (e) {
     results.style.display = "none";
 
     // Enable buttons
-    btnGameplay.forEach((btnGameplay) => {
-        btnGameplay.disabled = false;
-    });
+    btnEnabled();
 
     startGame();
 });
@@ -448,3 +462,4 @@ btnPlayAgain.addEventListener("click", function (e) {
 
 // Features that can be added:
 // rules
+// start over
