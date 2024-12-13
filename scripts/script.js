@@ -34,7 +34,7 @@ https://www.blackjacksimulator.net/simulators/classic-blackjack/
 */
 
 // Game Table
-const mainPage = document.querySelector(".main-page");
+const startPage = document.querySelector(".start-page");
 const gamePage = document.querySelector(".in-game");
 const dealerHand = document.querySelector(".dealer-hand");
 const playerHand = document.querySelector(".player-hand");
@@ -123,7 +123,7 @@ class Player {
             const cardsInHand = document.getElementById(`${this.role}-cards`);
             const newImg = document.createElement("img");
             const newBack = document.createElement("img");
-            newBack.src = `images/back.png`;
+            newBack.src = `images/back.svg`;
             newBack.id = `card-back-${this.role}${i + 1}`;
             newImg.src = `images/${this.hand[i]}.svg`;
 
@@ -169,7 +169,7 @@ class Player {
         const cardsInHand = document.getElementById(`${this.role}-cards`);
         const newImg = document.createElement("img");
         const newBack = document.createElement("img");
-        newBack.src = `images/back.png`;
+        newBack.src = `images/back.svg`;
         newImg.src = `images/${this.hand[this.hand.length - 1]}.svg`;
 
         cardsInHand.appendChild(newImg);
@@ -405,7 +405,7 @@ const player = new Player("player");
 
 btnStart.addEventListener("click", function (e) {
     e.preventDefault;
-    mainPage.style.display = "none";
+    startPage.style.display = "none";
     gamePage.style.display = "block";
 
     startGame();

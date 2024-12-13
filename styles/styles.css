@@ -1,71 +1,161 @@
-/* Base */
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Generic (CALLED IN NORMALIZE-FWD.CSS)
+	- Normalize
+	- Box sizing
+	- Media width
+# Base
+	- Typography
+	- Elements
+	- Links
+# Layouts
+# Components
+	- Start Page
+	- In Game
+	- Footer
+--------------------------------------------------------------*/
 
-/* html {
-    background-color: rgb(73, 73, 73);
-} */
+/*--------------------------------------------------------------
+# Base
+--------------------------------------------------------------*/
+
+html {
+    background: url("../images/background.jpg") fixed center;
+}
 
 body {
     margin: 0;
     background-color: ;
-    color: ;
-    font-family: ;
-    font-weight: ;
-    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    font-family: "Orbitron", sans-serif;
+    font-weight: 400;
+    font-size: 1.3rem;
     line-height: 1.5;
 }
 
-header {
+/* header {
     position: fixed;
     width: 60rem;
     background-color: rgb(240, 248, 255, 0.5);
     text-align: center;
     left: 16.7%;
-}
+} */
 
+/* Typography
+--------------------------------------------- */
+
+h1,
 h2 {
     text-transform: uppercase;
+    margin: 0;
 }
 
+h1 {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+footer p {
+    font-family: "Play", sans-serif;
+    font-size: 1rem;
+}
+
+/* Elements
+--------------------------------------------- */
+
 button {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     text-transform: uppercase;
     cursor: pointer;
+    color: white;
+    background-color: black;
+    border: double 5px green;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 button:hover {
     color: green;
 }
 
-/* Main Page */
-.main-page {
-    /* height: 100vh; */
+/*--------------------------------------------------------------
+# Layout
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+# Components
+--------------------------------------------------------------*/
+
+/* Start Page 
+--------------------------------------------- */
+
+.start-page {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 2rem;
     background-color: rgb(51, 100, 56);
     width: 60rem;
-    margin: 1rem auto 0;
-    padding: 3rem 0;
+    margin: 1.5rem auto;
+    padding: 2rem 0;
     border-radius: 1rem;
-    border: solid 1.5rem rgb(93, 66, 31);
-    box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.5);
-    color: white;
+    border: ridge 1.5rem rgb(80, 30, 30);
+    text-align: center;
 }
+
 .dealer {
-    width: 20rem;
+    width: 15rem;
 }
-/* In-Game Page */
+
+.title {
+    text-shadow: 3px 3px 8px red;
+}
+
+@keyframes button-text {
+    from {
+        color: rgb(255, 255, 255);
+    }
+    to {
+        color: rgb(255, 255, 255, 0.5);
+    }
+}
+
+.start-page button {
+    box-shadow: 0 13px rgb(93, 66, 31, 0.8);
+    margin: 1rem;
+    animation: 0.5s infinite alternate button-text;
+}
+
+.start-page button:hover {
+    font-weight: 600;
+    animation-play-state: paused;
+    animation-iteration-count: initial;
+}
+
+.start-page button:active {
+    box-shadow: 0 5px rgb(93, 66, 31);
+    translate: 0 3px;
+}
+
+/* In-Game 
+--------------------------------------------- */
 
 .in-game {
     display: none;
+    height: 100vh;
+    width: 60rem;
+    background-color: rgb(51, 100, 56);
+    width: 60rem;
+    margin: 1.5rem auto;
+    padding: 2rem 0;
+    border-radius: 1rem;
+    border: ridge 1.5rem rgb(80, 30, 30);
 }
 
 .in-game img {
     width: 8rem;
     position: absolute;
-    z-index: -1;
+    z-index: 1;
 }
 
 /* -------- Dealer Card --------- */
@@ -393,12 +483,13 @@ button:hover {
 }
 
 .popup {
+    font-family: "Play", sans-serif;
     display: none;
     position: absolute;
     right: 10rem;
     top: -3rem;
     border: solid red;
-    background-color: white;
+    background-color: transparent;
     border-radius: 5rem;
     font-size: 1.2rem;
     padding: 0.5rem;
@@ -415,6 +506,9 @@ button:hover {
     gap: 2rem;
 }
 
+/* EOG
+--------------------------------------------- */
+
 .results {
     display: none;
     /* display: flex; */
@@ -424,5 +518,17 @@ button:hover {
     top: 35%;
     left: 40%;
     background-color: rgb(255, 255, 255);
+    color: black;
     padding: 2rem 5rem;
+}
+
+/* Footer
+--------------------------------------------- */
+footer {
+    background-color: black;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin: 0;
+    text-align: center;
 }

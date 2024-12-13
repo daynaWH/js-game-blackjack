@@ -236,7 +236,7 @@ const player = new Player("player");
 
 btnStart.addEventListener("click", function (e) {
     e.preventDefault;
-    mainPage.style.display = "none";
+    startPage.style.display = "none";
     gamePage.style.display = "block";
     deck.shuffle();
 
