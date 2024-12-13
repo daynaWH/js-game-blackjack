@@ -59,6 +59,15 @@ const results = document.querySelector(".results");
 const btnPlayAgain = document.getElementById("btn-play-again");
 const btnEogHome = document.getElementById("btn-eog-main");
 
+// Audio
+const audioClick = new Audio("audio/click.mp3");
+const audioFlipCard = new Audio("audio/flipcard.mp3");
+const audioBlackjack = new Audio("audio/blackjack.mp3");
+const audioBust = new Audio("audio/bust.mp3");
+const audioEog = new Audio("audio/eog.mp3");
+
+// Main
+
 const tenPts = ["0", "j", "q", "k"];
 
 // A deck of playing cards object
@@ -245,8 +254,8 @@ function btnEnabled() {
 }
 
 function startGame() {
-    audioBackground.play();
     gamePage.style.opacity = 1;
+
     deck.newDeck = [];
     player.default();
     dealer.default();
@@ -268,6 +277,7 @@ function startGame() {
         if (player.secondScore === 21) {
             document.getElementById("player-popup").style.display = "block";
             document.getElementById("player-popup").textContent = "Blackjack!";
+            audioBlackjack.play();
             playerPts.style.display = "none";
             textOr.style.display = "none";
 
@@ -296,6 +306,7 @@ function playerEnd() {
     if (dealer.secondScore == 21) {
         document.getElementById("dealer-popup").style.display = "block";
         document.getElementById("dealer-popup").textContent = "Blackjack!";
+        audioBlackjack.play();
         dealerPts.style.display = "none";
         dealerSecondPts.style.display = "inline-block";
         document.getElementById("dealer-or").style.display = "none";
@@ -312,11 +323,13 @@ function playerEnd() {
     if (dealer.score == 21) {
         document.getElementById("dealer-popup").style.display = "block";
         document.getElementById("dealer-popup").textContent = "Blackjack!";
+        audioBlackjack.play();
     }
     // If the total exceeds 21 > display 'bust'
     else if (dealer.score > 21) {
         document.getElementById("dealer-popup").style.display = "block";
         document.getElementById("dealer-popup").textContent = "Bust!";
+        audioBust.play();
     }
 
     // If dealer hand includes A
@@ -324,6 +337,8 @@ function playerEnd() {
         if (dealer.secondScore == 21) {
             document.getElementById("dealer-popup").style.display = "block";
             document.getElementById("dealer-popup").textContent = "Blackjack!";
+            audioBlackjack.play();
+
             dealerPts.style.display = "none";
             document.getElementById("dealer-or").style.display = "none";
         } else if (dealer.secondScore > 21) {
@@ -438,6 +453,8 @@ btnHit.addEventListener("click", function () {
     if (player.score == 21) {
         document.getElementById("player-popup").style.display = "block";
         document.getElementById("player-popup").textContent = "Blackjack!";
+        audioBlackjack.play();
+
         playerSecondPts.style.display = "none";
         textOr.style.display = "none";
 
@@ -448,6 +465,8 @@ btnHit.addEventListener("click", function () {
     else if (player.score > 21) {
         document.getElementById("player-popup").style.display = "block";
         document.getElementById("player-popup").textContent = "Bust!";
+        audioBust.play();
+
         playerEnd();
         showResults();
     }
@@ -457,6 +476,8 @@ btnHit.addEventListener("click", function () {
         if (player.secondScore == 21) {
             document.getElementById("player-popup").style.display = "block";
             document.getElementById("player-popup").textContent = "Blackjack!";
+            audioBlackjack.play();
+
             playerPts.style.display = "none";
             textOr.style.display = "none";
             showResults();
@@ -508,18 +529,6 @@ btnEogHome.addEventListener("click", function () {
     gamePage.style.display = "none";
 });
 
-const audioBackground = new Audio("audio/background2.mp3");
-audioBackground.volume = 0.3;
-audioBackground.loop = true;
-const audioClick = new Audio("audio/click.mp3");
-const audioFlipCard = new Audio("audio/flipcard.mp3");
-const audioEog = new Audio("audio/eog.mp3");
-
 // Bug found:
 // Duplicated cards displayed
-// player bust & higher than dealer -> wins
-// Issues when hands have A (ex. results)
-
-// Features that can be added:
-// rules
-// start over
+// Issues when hands have A (ex. dealercard)
