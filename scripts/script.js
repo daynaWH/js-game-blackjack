@@ -260,14 +260,11 @@ function startGame() {
             document.getElementById("player-popup").textContent = "Blackjack!";
             playerPts.style.display = "none";
             textOr.style.display = "none";
-            console.log("21");
 
             playerEnd();
             showResults();
         }
     }, 2500);
-
-    // If the total == 21 > display 'Blackjack' & the player wins
 
     console.log(
         deck.newDeck[0],
@@ -290,6 +287,7 @@ function playerEnd() {
         document.getElementById("dealer-popup").style.display = "block";
         document.getElementById("dealer-popup").textContent = "Blackjack!";
         dealerPts.style.display = "none";
+        dealerSecondPts.style.display = "inline-block";
         document.getElementById("dealer-or").style.display = "none";
     }
 
@@ -379,7 +377,10 @@ function showResults() {
             ) {
                 setTimeout(player.lose, 1500);
                 console.log("lose");
-            } else if (player.secondScore > dealer.score) {
+            } else if (
+                player.secondScore > dealer.score ||
+                (player.secondScore < dealer.score && dealer.score > 21)
+            ) {
                 setTimeout(player.win, 1500);
                 console.log("win");
             }
@@ -422,36 +423,32 @@ btnHit.addEventListener("click", function () {
         document.getElementById("player-popup").style.display = "block";
         document.getElementById("player-popup").textContent = "Blackjack!";
         playerSecondPts.style.display = "none";
+        textOr.style.display = "none";
+
         playerEnd();
-        // setTimeout(player.win, 2000);
         showResults();
     }
     // If the total exceeds 21 > display 'Bust & the player loses
     else if (player.score > 21) {
         document.getElementById("player-popup").style.display = "block";
         document.getElementById("player-popup").textContent = "Bust!";
-
         playerEnd();
-        // setTimeout(player.lose, 2000);
         showResults();
     }
 
     if (playerSecondPts.style.display == "inline-block") {
-        // If hand includes A & the second Score == 21 > display 'Blackjack' & the player wins
+        // If hand includes A & the second Score == 21 > display 'Blackjack'
         if (player.secondScore == 21) {
             document.getElementById("player-popup").style.display = "block";
             document.getElementById("player-popup").textContent = "Blackjack!";
             playerPts.style.display = "none";
             textOr.style.display = "none";
-            // setTimeout(player.win, 2000);
             showResults();
         }
         // If hand includes A & one exceeds 21 > remove it
         else if (player.secondScore > 21) {
             textOr.style.display = "none";
             playerSecondPts.style.display = "none";
-
-            // showResults();
         }
     }
 });
@@ -476,9 +473,6 @@ btnStand.addEventListener("click", function () {
 btnPlayAgain.addEventListener("click", function (e) {
     e.preventDefault;
     results.style.display = "none";
-
-    // Enable buttons
-    btnEnabled();
 
     startGame();
 });
