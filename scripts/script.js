@@ -131,6 +131,7 @@ class Player {
             newImg.src = `images/${this.hand[i]}.svg`;
 
             setTimeout(() => {
+                audioFlipCard.play();
                 cardsInHand.appendChild(newImg);
                 cardsInHand.appendChild(newBack);
                 setTimeout(() => {
@@ -179,6 +180,7 @@ class Player {
         cardsInHand.appendChild(newBack);
 
         setTimeout(() => {
+            audioFlipCard.play();
             newBack.classList.add("flip");
             newImg.classList.add("flip");
         }, 50);
@@ -210,18 +212,21 @@ class Player {
 
     // Win
     win() {
+        audioEog.play();
         results.style.display = "block";
         eogMsg.textContent = "You Win!";
     }
 
     // Lose
     lose() {
+        audioEog.play();
         results.style.display = "block";
         eogMsg.textContent = "You Lose!";
     }
 
     // Tie
     tie() {
+        audioEog.play();
         results.style.display = "block";
         eogMsg.textContent = "It's a Tie!";
     }
@@ -240,6 +245,7 @@ function btnEnabled() {
 }
 
 function startGame() {
+    audioBackground.play();
     gamePage.style.opacity = 1;
     deck.newDeck = [];
     player.default();
@@ -413,6 +419,7 @@ const dealer = new Player("dealer");
 const player = new Player("player");
 
 btnStart.addEventListener("click", function (e) {
+    audioClick.play();
     e.preventDefault;
     startPage.style.display = "none";
     gamePage.style.display = "grid";
@@ -422,6 +429,7 @@ btnStart.addEventListener("click", function (e) {
 
 // When the player clicks the 'Hit' button > add a card to the player hand and add the total point
 btnHit.addEventListener("click", function () {
+    audioClick.play();
     player.getCard();
     playerPts.innerHTML = player.addScore();
     console.log(deck.newDeck[0], dealer.hand, player.hand); //testing
@@ -464,6 +472,7 @@ btnHit.addEventListener("click", function () {
 // When the player clicks the 'Stand' button
 // > Show the results div
 btnStand.addEventListener("click", function () {
+    audioClick.play();
     playerEnd();
 
     // If the hand has A & secondScore < 21
@@ -479,6 +488,7 @@ btnStand.addEventListener("click", function () {
 });
 
 btnPlayAgain.addEventListener("click", function (e) {
+    audioClick.play();
     e.preventDefault;
     results.style.display = "none";
 
@@ -486,15 +496,24 @@ btnPlayAgain.addEventListener("click", function (e) {
 });
 
 btnHome.addEventListener("click", function () {
+    audioClick.play();
     startPage.style.display = "block";
     gamePage.style.display = "none";
 });
 
 btnEogHome.addEventListener("click", function () {
+    audioClick.play();
     results.style.display = "none";
     startPage.style.display = "block";
     gamePage.style.display = "none";
 });
+
+const audioBackground = new Audio("audio/background2.mp3");
+audioBackground.volume = 0.3;
+audioBackground.loop = true;
+const audioClick = new Audio("audio/click.mp3");
+const audioFlipCard = new Audio("audio/flipcard.mp3");
+const audioEog = new Audio("audio/eog.mp3");
 
 // Bug found:
 // Duplicated cards displayed
