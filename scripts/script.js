@@ -237,6 +237,7 @@ function btnEnabled() {
 }
 
 function startGame() {
+    gamePage.style.opacity = 1;
     deck.newDeck = [];
     player.default();
     dealer.default();
@@ -399,6 +400,10 @@ function showResults() {
             }
         }
     }
+
+    setTimeout(() => {
+        gamePage.style.opacity = 0.5;
+    }, 1500);
 }
 
 const dealer = new Player("dealer");
