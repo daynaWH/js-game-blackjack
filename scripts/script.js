@@ -133,7 +133,7 @@ class Player {
                 setTimeout(() => {
                     newBack.classList.add("flip");
                     newImg.classList.add("flip");
-                }, 250);
+                }, 500);
             }, 1000 * i);
         }
     }
@@ -207,19 +207,19 @@ class Player {
 
     // Win
     win() {
-        results.style.display = "flex";
+        results.style.display = "block";
         eogMsg.textContent = "You Win!";
     }
 
     // Lose
     lose() {
-        results.style.display = "flex";
+        results.style.display = "block";
         eogMsg.textContent = "You Lose!";
     }
 
     // Tie
     tie() {
-        results.style.display = "flex";
+        results.style.display = "block";
         eogMsg.textContent = "It's a Tie!";
     }
 }
@@ -242,7 +242,7 @@ function startGame() {
     dealer.default();
     deck.shuffle();
 
-    btnControls.style.display = "flex";
+    btnControls.style.display = "block";
     btnDisabled();
 
     player.initialCards();
@@ -407,7 +407,7 @@ const player = new Player("player");
 btnStart.addEventListener("click", function (e) {
     e.preventDefault;
     startPage.style.display = "none";
-    gamePage.style.display = "block";
+    gamePage.style.display = "grid";
 
     startGame();
 });

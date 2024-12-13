@@ -26,21 +26,12 @@ html {
 
 body {
     margin: 0;
-    background-color: ;
     color: rgb(255, 255, 255);
     font-family: "Orbitron", sans-serif;
     font-weight: 400;
     font-size: 1.3rem;
     line-height: 1.5;
 }
-
-/* header {
-    position: fixed;
-    width: 60rem;
-    background-color: rgb(240, 248, 255, 0.5);
-    text-align: center;
-    left: 16.7%;
-} */
 
 /* Typography
 --------------------------------------------- */
@@ -79,6 +70,11 @@ button:hover {
     color: green;
 }
 
+button:disabled {
+    background-color: darkgray;
+    cursor: wait;
+}
+
 /*--------------------------------------------------------------
 # Layout
 --------------------------------------------------------------*/
@@ -94,8 +90,9 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(51, 100, 56);
-    width: 60rem;
+    background-color: rgb(51, 100, 56, 0.95);
+    height: 86vh;
+    max-width: 60rem;
     margin: 1.5rem auto;
     padding: 2rem 0;
     border-radius: 1rem;
@@ -121,7 +118,7 @@ button:hover {
 }
 
 .start-page button {
-    box-shadow: 0 13px rgb(93, 66, 31, 0.8);
+    box-shadow: 0 15px rgb(93, 66, 31, 0.8);
     margin: 1rem;
     animation: 0.5s infinite alternate button-text;
 }
@@ -142,28 +139,88 @@ button:hover {
 
 .in-game {
     display: none;
-    height: 100vh;
-    width: 60rem;
-    background-color: rgb(51, 100, 56);
-    width: 60rem;
+    /* display: grid; */
+    grid-template-rows: repeat(2, 1fr) 5rem;
+    row-gap: 2rem;
+    position: relative;
+    height: 86vh;
+    max-width: 60rem;
+    background-color: rgb(51, 100, 56, 0.95);
     margin: 1.5rem auto;
-    padding: 2rem 0;
     border-radius: 1rem;
     border: ridge 1.5rem rgb(80, 30, 30);
+    overflow: hidden;
+}
+
+.dealer-hand,
+.player-hand {
+    display: grid;
+    grid-template-columns: 13rem auto 15rem;
+    align-items: center;
+}
+
+.dealer-hand p,
+.player-hand p {
+    justify-self: flex-end;
 }
 
 .in-game img {
-    width: 8rem;
+    width: 7rem;
     position: absolute;
     z-index: 1;
+}
+
+.game-controls {
+    display: none;
+    grid-row: 3/ 4;
+    align-self: center;
+    justify-self: center;
+}
+
+/* Points */
+
+.dealer-points,
+.player-points {
+    font-size: 2rem;
+    grid-column: 3 /4;
+}
+
+.dealer-points img {
+    width: 1.5rem;
+}
+
+.or,
+.second-pts {
+    display: none;
+}
+
+.popup {
+    font-family: "Play", sans-serif;
+    display: none;
+    position: absolute;
+    right: 2rem;
+    border: solid red;
+    background-color: transparent;
+    border-radius: 5rem;
+    font-size: 1.5rem;
+    padding: 0 0.8rem;
+    transform: rotate(10deg);
+}
+
+.dealer-hand .popup {
+    top: 4rem;
+}
+
+.player-hand .popup {
+    top: 19rem;
 }
 
 /* -------- Dealer Card --------- */
 
 /* First Card - Front */
 .dealer-hand img:first-of-type {
-    right: 45rem;
-    top: 4rem;
+    right: 33rem;
+    top: 3rem;
     transform: rotateY(180deg);
     transition: transform 2s;
     backface-visibility: hidden;
@@ -176,15 +233,14 @@ button:hover {
 /* First Card - Back */
 
 .dealer-hand img:nth-of-type(2) {
-    position: fixed;
     right: -100%;
-    top: 4rem;
+    top: 3rem;
     transition: right 0.5s ease, transform 2s;
     backface-visibility: hidden;
 }
 
 .dealer-hand img:nth-of-type(2).flip {
-    right: 45rem;
+    right: 33rem;
     transform: rotateY(180deg);
     backface-visibility: hidden;
 }
@@ -192,8 +248,8 @@ button:hover {
 /* Second Card - Front */
 
 .dealer-hand img:nth-of-type(3) {
-    right: 40rem;
-    top: 5rem;
+    right: 30rem;
+    top: 3.5rem;
     transform: rotateY(180deg);
     transition: transform 2s;
     backface-visibility: hidden;
@@ -206,21 +262,20 @@ button:hover {
 /* Second Card - Back */
 
 .dealer-hand img:nth-of-type(4) {
-    /* position: fixed; */
     right: -100%;
-    top: 5rem;
+    top: 3.5rem;
     transition: right 0.5s ease, transform 2s;
 }
 
 .dealer-hand img:nth-of-type(4).flip {
-    right: 40rem;
+    right: 30rem;
     transform: rotateY(180deg);
 }
 
 /* Third Card - Front */
 .dealer-hand img:nth-of-type(5) {
-    right: 35rem;
-    top: 6rem;
+    right: 27rem;
+    top: 4rem;
     transform: rotateY(180deg);
     transition: transform 2s;
     backface-visibility: hidden;
@@ -233,23 +288,22 @@ button:hover {
 /* Third Card - Back */
 
 .dealer-hand img:nth-of-type(6) {
-    position: fixed;
     right: -100%;
-    top: 6rem;
+    top: 4rem;
     transition: right 0.5s ease, transform 2s;
     backface-visibility: hidden;
 }
 
 .dealer-hand img:nth-of-type(6).flip {
-    right: 35rem;
+    right: 27rem;
     transform: rotateY(180deg);
     backface-visibility: hidden;
 }
 
 /* Fourth Card - Front */
 .dealer-hand img:nth-of-type(7) {
-    right: 30rem;
-    top: 7rem;
+    right: 24rem;
+    top: 4.5rem;
     transform: rotateY(180deg);
     transition: transform 2s;
     backface-visibility: hidden;
@@ -262,24 +316,22 @@ button:hover {
 /* Fourth Card - Back */
 
 .dealer-hand img:nth-of-type(8) {
-    position: fixed;
-
     right: -100%;
-    top: 7rem;
+    top: 4.5rem;
     transition: right 0.5s ease, transform 2s;
     backface-visibility: hidden;
 }
 
 .dealer-hand img:nth-of-type(8).flip {
-    right: 30rem;
+    right: 24rem;
     transform: rotateY(180deg);
     backface-visibility: hidden;
 }
 
 /* Fifth Card - Front */
 .dealer-hand img:nth-of-type(9) {
-    right: 25rem;
-    top: 8rem;
+    right: 21rem;
+    top: 5rem;
     transform: rotateY(180deg);
     transition: transform 2s;
     backface-visibility: hidden;
@@ -292,15 +344,14 @@ button:hover {
 /* Fifth Card - Back */
 
 .dealer-hand img:nth-of-type(10) {
-    position: fixed;
     right: -100%;
-    top: 8rem;
+    top: 5rem;
     transition: right 0.5s ease, transform 2s;
     backface-visibility: hidden;
 }
 
 .dealer-hand img:nth-of-type(10).flip {
-    right: 25rem;
+    right: 21rem;
     transform: rotateY(180deg);
     backface-visibility: hidden;
 }
@@ -309,8 +360,8 @@ button:hover {
 
 /* First Card - Front */
 .player-hand img:first-of-type {
-    right: 45rem;
-    bottom: 10rem;
+    right: 33rem;
+    bottom: 9rem;
     transform: rotateY(180deg);
     transition: transform 2s;
     backface-visibility: hidden;
@@ -323,23 +374,23 @@ button:hover {
 /* First Card - Back */
 
 .player-hand img:nth-of-type(2) {
-    position: fixed;
     right: -100%;
-    bottom: 10rem;
+    bottom: 9rem;
     transition: right 0.5s ease, transform 2s;
+
     backface-visibility: hidden;
 }
 
 .player-hand img:nth-of-type(2).flip {
-    right: 45rem;
+    right: 33rem;
     transform: rotateY(180deg);
     backface-visibility: hidden;
 }
 
 /* Second card - Front */
 .player-hand img:nth-of-type(3) {
-    right: 40rem;
-    bottom: 9rem;
+    right: 30rem;
+    bottom: 8.5rem;
     transform: rotateY(180deg);
     transition: transform 2s;
     backface-visibility: hidden;
@@ -352,15 +403,14 @@ button:hover {
 /* Second card - Back */
 
 .player-hand img:nth-of-type(4) {
-    position: fixed;
     right: -100%;
-    bottom: 9rem;
+    bottom: 8.5rem;
     transition: right 0.5s ease, transform 2s;
     backface-visibility: hidden;
 }
 
 .player-hand img:nth-of-type(4).flip {
-    right: 40rem;
+    right: 30rem;
     transform: rotateY(180deg);
     backface-visibility: hidden;
 }
@@ -368,7 +418,7 @@ button:hover {
 /* Third card - Front */
 
 .player-hand img:nth-of-type(5) {
-    right: 35rem;
+    right: 27rem;
     bottom: 8rem;
     transform: rotateY(180deg);
     transition: transform 2s;
@@ -382,7 +432,6 @@ button:hover {
 /* Third Card - Back */
 
 .player-hand img:nth-of-type(6) {
-    position: fixed;
     right: -100%;
     bottom: 8rem;
     transition: right 0.5s ease, transform 2s;
@@ -390,7 +439,7 @@ button:hover {
 }
 
 .player-hand img:nth-of-type(6).flip {
-    right: 35rem;
+    right: 27rem;
     transform: rotateY(180deg);
     backface-visibility: hidden;
 }
@@ -398,8 +447,8 @@ button:hover {
 /* Fourth card - Front */
 
 .player-hand img:nth-of-type(7) {
-    right: 30rem;
-    bottom: 7rem;
+    right: 24rem;
+    bottom: 7.5rem;
     transform: rotateY(180deg);
     transition: transform 2s;
     backface-visibility: hidden;
@@ -412,15 +461,14 @@ button:hover {
 /* Fourth Card - Back */
 
 .player-hand img:nth-of-type(8) {
-    position: fixed;
     right: -100%;
-    bottom: 7rem;
+    bottom: 7.5rem;
     transition: right 0.5s ease, transform 2s;
     backface-visibility: hidden;
 }
 
 .player-hand img:nth-of-type(8).flip {
-    right: 30rem;
+    right: 24rem;
     transform: rotateY(180deg);
     backface-visibility: hidden;
 }
@@ -428,8 +476,8 @@ button:hover {
 /* Fifth card - Front */
 
 .player-hand img:nth-of-type(9) {
-    right: 25rem;
-    bottom: 6rem;
+    right: 21rem;
+    bottom: 7rem;
     transform: rotateY(180deg);
     transition: transform 2s;
     backface-visibility: hidden;
@@ -442,84 +490,50 @@ button:hover {
 /* Fifth Card - Back */
 
 .player-hand img:nth-of-type(10) {
-    position: fixed;
     right: -100%;
-    bottom: 6rem;
+    bottom: 7rem;
     transition: right 0.5s ease, transform 2s;
     backface-visibility: hidden;
 }
 
 .player-hand img:nth-of-type(10).flip {
-    right: 25rem;
+    right: 21rem;
     transform: rotateY(180deg);
     backface-visibility: hidden;
-}
-
-/* Points */
-
-.dealer-points,
-.player-points {
-    font-size: 2rem;
-    position: absolute;
-}
-
-.dealer-points {
-    top: 5rem;
-    right: 25rem;
-}
-
-.dealer-points img {
-    width: 1.5rem;
-}
-
-.player-points {
-    top: 24rem;
-    right: 25rem;
-}
-
-.or,
-.second-pts {
-    display: none;
-}
-
-.popup {
-    font-family: "Play", sans-serif;
-    display: none;
-    position: absolute;
-    right: 10rem;
-    top: -3rem;
-    border: solid red;
-    background-color: transparent;
-    border-radius: 5rem;
-    font-size: 1.2rem;
-    padding: 0.5rem;
-    transform: rotate(10deg);
-}
-
-.game-controls {
-    display: none;
-    /* display: flex; */
-    justify-content: center;
-    height: 100vh;
-    align-items: flex-end;
-    padding-bottom: 2rem;
-    gap: 2rem;
 }
 
 /* EOG
 --------------------------------------------- */
 
+@keyframes pop {
+    from {
+        font-size: 1.4rem;
+    }
+    to {
+        font-size: 1.5rem;
+    }
+}
+
 .results {
     display: none;
-    /* display: flex; */
-    flex-direction: column;
-    align-items: center;
     position: absolute;
     top: 35%;
-    left: 40%;
-    background-color: rgb(255, 255, 255);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: fit-content;
+    z-index: 10;
+    text-align: center;
+    background-image: linear-gradient(180deg, white, rgb(110, 110, 110));
     color: black;
     padding: 2rem 5rem;
+    border: solid 5px;
+    border-radius: 1rem;
+    animation: 0.6s infinite alternate pop;
+}
+
+.results button {
+    margin-top: 0.5rem;
 }
 
 /* Footer
