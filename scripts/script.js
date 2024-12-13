@@ -51,11 +51,13 @@ const btnControls = document.querySelector(".game-controls");
 const btnGameplay = document.querySelectorAll(".game-controls button");
 const btnHit = document.getElementById("btn-hit");
 const btnStand = document.getElementById("btn-stand");
+const btnHome = document.getElementById("btn-main");
 
 // EOG
 const eogMsg = document.getElementById("player-message");
 const results = document.querySelector(".results");
 const btnPlayAgain = document.getElementById("btn-play-again");
+const btnEogHome = document.getElementById("btn-eog-main");
 
 const tenPts = ["0", "j", "q", "k"];
 
@@ -108,6 +110,7 @@ class Player {
         dealerPts.style.display = "inline-block";
         dealerSecondPts.style.display = "none";
 
+        document.getElementById(`${this.role}-or`).style.display = "none";
         document.getElementById(`${this.role}-popup`).style.display = "none";
         const cardsInHand = document.getElementById(`${this.role}-cards`);
         let countImg = cardsInHand.childElementCount;
@@ -480,6 +483,17 @@ btnPlayAgain.addEventListener("click", function (e) {
     results.style.display = "none";
 
     startGame();
+});
+
+btnHome.addEventListener("click", function () {
+    startPage.style.display = "block";
+    gamePage.style.display = "none";
+});
+
+btnEogHome.addEventListener("click", function () {
+    results.style.display = "none";
+    startPage.style.display = "block";
+    gamePage.style.display = "none";
 });
 
 // Bug found:
