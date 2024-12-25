@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>BlackJack</title>
 
         <!-- Font -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,7 +19,6 @@
 
         <!-- JS file -->
         <script src="scripts/script.js" defer></script>
-        <!-- <script src="scripts/script2.js" defer></script> -->
     </head>
     <body>
         <div class="start-page">
@@ -52,14 +51,12 @@
                 <div class="player-points">
                     <span class="points">Total:</span>
                     <span id="player-pts-value-one">0</span>
-                    <!-- <div id="ace-card"> -->
                     <span id="player-or" class="or">/</span>
                     <span id="player-pts-value-two" class="second-pts">0</span>
-                    <!-- </div> -->
                     <span class="popup" id="player-popup">Blackjack!</span>
                 </div>
             </div>
-            <div class="game-controls">
+            <div class="game-controls button-flex">
                 <button id="btn-hit">Hit</button>
                 <button id="btn-stand">Stand</button>
                 <button id="btn-main" class="btn-main">
@@ -81,7 +78,7 @@
 
         <div class="results">
             <h2 id="player-message">You win!</h2>
-            <div>
+            <div class="button-flex">
                 <button id="btn-play-again">Play Again</button>
                 <button id="btn-eog-main" class="btn-main">
                     <svg

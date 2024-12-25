@@ -1,49 +1,8 @@
-// Single user plays a single round of Blackjack against the dealer (computer)
-// Rule:
-// Whoever gets closer to 21 without going over it wins
-
-/*
-Steps
-1. The player is initially dealt two cards
-2. The player's hand is totaled
-- If there's an ace > display both totals (with +1 and +11)
-- if the hand goes over 21, its value is automatically 1
-3. The player is given the option to: hit or stand
-3-1. hit > dealt another card > hand is totaled
-3-2. stand > the dealer plays its cards
-4. The player automatically loses if they go over 21
-5. The player can continue to ask for cards until they click on stand
-5-1. If the player stands > the dealer plays its hand
-
-Dealer's rule
-- While the dealer's hand's total points < 17, it continues to get more cards
-- If the dealer's points >= 17, it holds
-- The hand is totaled
-- Compare both hands & the player with higher points wins
-- If the dealer's points > 21, it automatically loses
-
-EoG
-- Display win/lose message
-- Display a button to play a new game
-*/
-
-/* 
-https://lasatlantis.com/game/single-deck-blackjack-n/
-https://ga6.gahypergaming.com/rgs/views/gameart/gameartdemo.js?game=423
-https://www.blackjacksimulator.net/simulators/classic-blackjack/
-*/
+// Variables
 
 // Game Table
 const startPage = document.querySelector(".start-page");
 const gamePage = document.querySelector(".in-game");
-const dealerHand = document.querySelector(".dealer-hand");
-const playerHand = document.querySelector(".player-hand");
-let dealerPts = document.getElementById("dealer-pts-value-one");
-let dealerSecondPts = document.getElementById("dealer-pts-value-two");
-let playerPts = document.getElementById("player-pts-value-one");
-let playerSecondPts = document.getElementById("player-pts-value-two");
-// const acePts = document.getElementById("ace-card");
-const textOr = document.getElementById("player-or");
 
 // Buttons
 const btnStart = document.getElementById("btn-start");
@@ -54,8 +13,8 @@ const btnStand = document.getElementById("btn-stand");
 const btnHome = document.getElementById("btn-main");
 
 // EOG
-const eogMsg = document.getElementById("player-message");
 const results = document.querySelector(".results");
+const eogMsg = document.getElementById("player-message");
 const btnPlayAgain = document.getElementById("btn-play-again");
 const btnEogHome = document.getElementById("btn-eog-main");
 
@@ -66,7 +25,23 @@ const audioBlackjack = new Audio("audio/blackjack.mp3");
 const audioBust = new Audio("audio/bust.mp3");
 const audioEog = new Audio("audio/eog.mp3");
 
-// Main
+// Player HTML Elements Object
+const elementsPlayer = {
+    pts: document.getElementById("player-pts-value-one"),
+    secondPts: document.getElementById("player-pts-value-two"),
+    or: document.getElementById("player-or"),
+    popup: document.getElementById("player-popup"),
+};
+
+// Dealer HTML Elements Object
+const elementsDealer = {
+    pts: document.getElementById("dealer-pts-value-one"),
+    secondPts: document.getElementById("dealer-pts-value-two"),
+    or: document.getElementById("dealer-or"),
+    popup: document.getElementById("dealer-popup"),
+};
+
+// --------- Main ---------
 
 const tenPts = ["0", "j", "q", "k"];
 
@@ -103,24 +78,23 @@ class Player {
         this.hand = [];
         this.score = 0;
         this.secondScore = 0;
-        this.scoreArr = [this.score, this.secondScore];
     }
 
+    // Default state of each player
     default() {
         this.hand = [];
         this.score = 0;
         this.secondScore = 0;
 
-        playerPts.innerHTML = 0;
-        playerPts.style.display = "inline-block";
-        playerSecondPts.style.display = "none";
-
-        dealerPts.innerHTML = "🃏";
-        dealerPts.style.display = "inline-block";
-        dealerSecondPts.style.display = "none";
-
+        document.getElementById(`${this.role}-pts-value-one`).style.display =
+            "inline-block";
+        document.getElementById(`${this.role}-pts-value-two`).style.display =
+            "none";
         document.getElementById(`${this.role}-or`).style.display = "none";
         document.getElementById(`${this.role}-popup`).style.display = "none";
+        elementsPlayer.pts.innerHTML = 0;
+        elementsDealer.pts.innerHTML = "🃏";
+
         const cardsInHand = document.getElementById(`${this.role}-cards`);
         let countImg = cardsInHand.childElementCount;
         for (let i = 0; i < countImg; i++) {
@@ -135,9 +109,12 @@ class Player {
             const cardsInHand = document.getElementById(`${this.role}-cards`);
             const newImg = document.createElement("img");
             const newBack = document.createElement("img");
+            newImg.src = `images/${this.hand[i]}.svg`;
+            newImg.classList.add("card-front");
+
             newBack.src = `images/back.svg`;
             newBack.id = `card-back-${this.role}${i + 1}`;
-            newImg.src = `images/${this.hand[i]}.svg`;
+            newBack.classList.add("card-back");
 
             setTimeout(() => {
                 audioFlipCard.play();
@@ -161,18 +138,16 @@ class Player {
             } else if (lastDigit == "a") {
                 this.score += 1;
                 this.secondScore = this.score + 10;
-                document.getElementById(`${this.role}-or`).style.display =
-                    "inline-block";
-                document.getElementById(
-                    `${this.role}-pts-value-two`
-                ).style.display = "inline-block";
+                if (player.hand[i].slice(-1) == "a") {
+                    elementsPlayer.or.style.display = "inline-block";
+                    elementsPlayer.secondPts.style.display = "inline-block";
+                }
             } else {
                 this.score += Number(lastDigit);
                 this.secondScore += Number(lastDigit);
             }
         }
-        document.getElementById(`${this.role}-pts-value-two`).textContent =
-            this.secondScore;
+        elementsPlayer.secondPts.textContent = player.secondScore;
         return this.score;
     }
 
@@ -182,8 +157,11 @@ class Player {
         const cardsInHand = document.getElementById(`${this.role}-cards`);
         const newImg = document.createElement("img");
         const newBack = document.createElement("img");
-        newBack.src = `images/back.svg`;
         newImg.src = `images/${this.hand[this.hand.length - 1]}.svg`;
+        newImg.classList.add("card-front");
+
+        newBack.src = `images/back.svg`;
+        newBack.classList.add("card-back");
 
         cardsInHand.appendChild(newImg);
         cardsInHand.appendChild(newBack);
@@ -219,72 +197,71 @@ class Player {
         return this.score;
     }
 
-    // Win
-    win() {
-        audioEog.play();
-        results.style.display = "block";
-        eogMsg.textContent = "You Win!";
+    // BlackJack
+    showBlackjack() {
+        // setTimeout(() => {
+        audioBlackjack.play();
+        document.getElementById(`${this.role}-popup`).style.display = "block";
+        document.getElementById(`${this.role}-popup`).textContent =
+            "Blackjack!";
+        document.getElementById(`${this.role}-or`).style.display = "none";
+        // }, 500);
     }
 
-    // Lose
-    lose() {
-        audioEog.play();
-        results.style.display = "block";
-        eogMsg.textContent = "You Lose!";
-    }
-
-    // Tie
-    tie() {
-        audioEog.play();
-        results.style.display = "block";
-        eogMsg.textContent = "It's a Tie!";
+    // Bust
+    showBust() {
+        // setTimeout(() => {
+        audioBust.play();
+        document.getElementById(`${this.role}-popup`).style.display = "block";
+        document.getElementById(`${this.role}-popup`).textContent = "Bust!";
+        // }, 500);
     }
 }
 
 function btnDisabled() {
-    btnGameplay.forEach((btnGameplay) => {
-        btnGameplay.disabled = true;
+    btnGameplay.forEach((btn) => {
+        btn.disabled = true;
     });
 }
 
 function btnEnabled() {
-    btnGameplay.forEach((btnGameplay) => {
-        btnGameplay.disabled = false;
+    btnGameplay.forEach((btn) => {
+        btn.disabled = false;
     });
 }
 
 function startGame() {
+    // Set everything in the game page to default state
     gamePage.style.opacity = 1;
-
     deck.newDeck = [];
     player.default();
     dealer.default();
     deck.shuffle();
 
-    btnControls.style.display = "block";
+    // btnControls.style.display = "block";
+    btnControls.style.display = "flex";
     btnDisabled();
 
+    // Deal initial cards for both players
     player.initialCards();
-
     setTimeout(() => {
         dealer.initialCards();
     }, 500);
 
     setTimeout(() => {
-        playerPts.innerHTML = player.initialScore();
+        elementsPlayer.pts.innerHTML = player.initialScore();
+        dealer.initialScore();
         btnEnabled();
 
-        if (player.secondScore === 21) {
-            document.getElementById("player-popup").style.display = "block";
-            document.getElementById("player-popup").textContent = "Blackjack!";
-            audioBlackjack.play();
-            playerPts.style.display = "none";
-            textOr.style.display = "none";
-
-            playerEnd();
-            showResults();
+        if (player.secondScore == 21) {
+            player.showBlackjack();
+            elementsPlayer.pts.style.display = "none";
+            setTimeout(() => {
+                dealerOpen();
+                showResults();
+            }, 1000);
         }
-    }, 2500);
+    }, 3000);
 
     console.log(
         deck.newDeck[0],
@@ -295,131 +272,156 @@ function startGame() {
     ); //testing
 }
 
-function playerEnd() {
+// Function to reveal dealer's second card & final score
+// Need 4 timeframes - 1. opencard 2. initial score 3. get cards one at a time 4. show score
+function dealerOpen() {
+    // #1
     // Disable the buttons
     btnDisabled();
 
     // The dealer opens the second card & score is displayed
+    audioFlipCard.play();
     document.getElementById("card-back-dealer2").style.display = "none";
-    dealerPts.innerHTML = dealer.initialScore();
 
-    if (dealer.secondScore == 21) {
-        document.getElementById("dealer-popup").style.display = "block";
-        document.getElementById("dealer-popup").textContent = "Blackjack!";
-        audioBlackjack.play();
-        dealerPts.style.display = "none";
-        dealerSecondPts.style.display = "inline-block";
-        document.getElementById("dealer-or").style.display = "none";
-    }
-
-    // Dealer plays its hand
-    while (dealer.score < 17 && dealer.secondScore !== 21) {
-        // get more cards
-        dealer.getCard();
-        dealerPts.innerHTML = dealer.addScore();
-    }
-
-    // If the total == 21 > display 'Blackjack' (default)
-    if (dealer.score == 21) {
-        document.getElementById("dealer-popup").style.display = "block";
-        document.getElementById("dealer-popup").textContent = "Blackjack!";
-        audioBlackjack.play();
-    }
-    // If the total exceeds 21 > display 'bust'
-    else if (dealer.score > 21) {
-        document.getElementById("dealer-popup").style.display = "block";
-        document.getElementById("dealer-popup").textContent = "Bust!";
-        audioBust.play();
-    }
-
-    // If dealer hand includes A
-    if (dealerSecondPts.style.display == "inline-block") {
+    // #2
+    // elementsDealer.pts.innerHTML = dealer.initialScore();
+    if (dealer.hand[0].slice(-1) == "a" || dealer.hand[1].slice(-1) == "a") {
+        elementsDealer.secondPts.innerHTML = dealer.secondScore;
+        elementsDealer.or.style.display = "inline-block";
+        elementsDealer.secondPts.style.display = "inline-block";
         if (dealer.secondScore == 21) {
-            document.getElementById("dealer-popup").style.display = "block";
-            document.getElementById("dealer-popup").textContent = "Blackjack!";
-            audioBlackjack.play();
-
-            dealerPts.style.display = "none";
-            document.getElementById("dealer-or").style.display = "none";
-        } else if (dealer.secondScore > 21) {
-            document.getElementById("dealer-or").style.display = "none";
-            dealerSecondPts.style.display = "none";
-        } else if (dealer.secondScore < 21) {
-            dealerPts.style.display = "none";
-            document.getElementById("dealer-or").style.display = "none";
+            elementsDealer.pts.style.display = "none";
+            elementsDealer.or.style.display = "none";
         }
     }
+    elementsDealer.pts.innerHTML = dealer.score;
+
+    // #3
+    // Dealer plays its hand while the score is less than 17
+    setTimeout(() => {
+        while (dealer.score < 17 && dealer.secondScore !== 21) {
+            dealer.getCard();
+            // #4
+            elementsDealer.pts.innerHTML = dealer.addScore();
+        }
+
+        // If the total == 21 without A > display 'Blackjack'
+        if (dealer.score == 21) {
+            dealer.showBlackjack();
+        }
+        // If the total exceeds 21 > display 'Bust'
+        else if (dealer.score > 21) {
+            dealer.showBust();
+        }
+
+        // If dealer hand includes A
+        if (elementsDealer.secondPts.style.display == "inline-block") {
+            if (dealer.secondScore == 21) {
+                dealer.showBlackjack();
+                elementsDealer.pts.style.display = "none";
+            } else if (dealer.secondScore > 21) {
+                elementsDealer.secondPts.style.display = "none";
+                elementsDealer.or.style.display = "none";
+            } else if (dealer.secondScore < 21) {
+                elementsDealer.pts.style.display = "none";
+                elementsDealer.or.style.display = "none";
+            }
+        }
+    }, 600);
 }
 
 // Compare both hands - show results at the end
+
+// Win
+function win() {
+    audioEog.play();
+    results.style.display = "block";
+    eogMsg.textContent = "You Win!";
+}
+
+// Lose
+function lose() {
+    audioEog.play();
+    results.style.display = "block";
+    eogMsg.textContent = "You Lose!";
+}
+
+// Tie
+function tie() {
+    audioEog.play();
+    results.style.display = "block";
+    eogMsg.textContent = "It's a Tie!";
+}
+
+// Function to display eog results pop up
 function showResults() {
-    if (playerSecondPts.style.display == "none") {
-        if (dealerSecondPts.style.display == "none") {
+    if (elementsPlayer.secondPts.style.display == "none") {
+        if (elementsDealer.secondPts.style.display == "none") {
             if (
                 (player.score > 21 && dealer.score > 21) ||
                 player.score === dealer.score
             ) {
-                setTimeout(player.tie, 1500);
+                setTimeout(tie, 1500);
                 console.log("tie");
             } else if (
                 (player.score < dealer.score && dealer.score <= 21) ||
                 (player.score > 21 && dealer.score <= 21)
             ) {
-                setTimeout(player.lose, 1500);
+                setTimeout(lose, 1500);
                 console.log("lose");
             } else if (
                 player.score > dealer.score ||
                 (player.score <= 21 && dealer.score > 21)
             ) {
-                setTimeout(player.win, 1500);
+                setTimeout(win, 1500);
                 console.log("win");
             }
         }
         // When dealer has A = 11
-        else if ((dealerSecondPts.style.display = "inline-block")) {
+        else if ((elementsDealer.secondPts.style.display = "inline-block")) {
             if (player.score === dealer.secondScore) {
-                setTimeout(player.tie, 1500);
+                setTimeout(tie, 1500);
                 console.log("tie");
             } else if (player.score < dealer.secondScore) {
-                setTimeout(player.lose, 1500);
+                setTimeout(lose, 1500);
                 console.log("lose");
             } else if (player.score > dealer.secondScore) {
-                setTimeout(player.win, 1500);
+                setTimeout(win, 1500);
                 console.log("win");
             }
         }
     }
 
     // When player has A = 11
-    else if (playerSecondPts.style.display == "inline-block") {
-        if ((dealerSecondPts.style.display = "none")) {
+    else if (elementsPlayer.secondPts.style.display == "inline-block") {
+        // When dealer also has A = 11
+        if (elementsDealer.secondPts.style.display == "inline-block") {
+            if (player.secondScore === dealer.secondScore) {
+                setTimeout(tie, 1500);
+                console.log("tie");
+            } else if (player.secondScore < dealer.secondScore) {
+                setTimeout(lose, 1500);
+                console.log("lose");
+            } else if (player.secondScore > dealer.secondScore) {
+                setTimeout(win, 1500);
+                console.log("win");
+            }
+            // When dealer has A = 1
+        } else if ((elementsDealer.secondPts.style.display = "none")) {
             if (player.secondScore == dealer.score) {
-                setTimeout(player.tie, 1500);
+                setTimeout(tie, 1500);
                 console.log("tie");
             } else if (
                 player.secondScore < dealer.score &&
                 dealer.score <= 21
             ) {
-                setTimeout(player.lose, 1500);
+                setTimeout(lose, 1500);
                 console.log("lose");
             } else if (
                 player.secondScore > dealer.score ||
                 (player.secondScore < dealer.score && dealer.score > 21)
             ) {
-                setTimeout(player.win, 1500);
-                console.log("win");
-            }
-        }
-        // When dealer also has A = 11
-        else if ((dealerSecondPts.style.display = "inline-block")) {
-            if (player.secondScore === dealer.secondScore) {
-                setTimeout(player.tie, 1500);
-                console.log("tie");
-            } else if (player.secondScore < dealer.secondScore) {
-                setTimeout(player.lose, 1500);
-                console.log("lose");
-            } else if (player.secondScore > dealer.secondScore) {
-                setTimeout(player.win, 1500);
+                setTimeout(win, 1500);
                 console.log("win");
             }
         }
@@ -434,8 +436,8 @@ const dealer = new Player("dealer");
 const player = new Player("player");
 
 btnStart.addEventListener("click", function (e) {
-    audioClick.play();
     e.preventDefault;
+    audioClick.play();
     startPage.style.display = "none";
     gamePage.style.display = "grid";
 
@@ -443,71 +445,71 @@ btnStart.addEventListener("click", function (e) {
 });
 
 // When the player clicks the 'Hit' button > add a card to the player hand and add the total point
+// Need 2 timeframes - 1. getcard 2. then show score
 btnHit.addEventListener("click", function () {
     audioClick.play();
     player.getCard();
-    playerPts.innerHTML = player.addScore();
-    console.log(deck.newDeck[0], dealer.hand, player.hand); //testing
+    setTimeout(() => {
+        elementsPlayer.pts.innerHTML = player.addScore();
+        console.log(deck.newDeck[0], dealer.hand, player.hand); //testing
 
-    // If the total == 21 > display 'Blackjack' & the player wins
-    if (player.score == 21) {
-        document.getElementById("player-popup").style.display = "block";
-        document.getElementById("player-popup").textContent = "Blackjack!";
-        audioBlackjack.play();
-
-        playerSecondPts.style.display = "none";
-        textOr.style.display = "none";
-
-        playerEnd();
-        showResults();
-    }
-    // If the total exceeds 21 > display 'Bust & the player loses
-    else if (player.score > 21) {
-        document.getElementById("player-popup").style.display = "block";
-        document.getElementById("player-popup").textContent = "Bust!";
-        audioBust.play();
-
-        playerEnd();
-        showResults();
-    }
-
-    if (playerSecondPts.style.display == "inline-block") {
-        // If hand includes A & the second Score == 21 > display 'Blackjack'
-        if (player.secondScore == 21) {
-            document.getElementById("player-popup").style.display = "block";
-            document.getElementById("player-popup").textContent = "Blackjack!";
-            audioBlackjack.play();
-
-            playerPts.style.display = "none";
-            textOr.style.display = "none";
-            showResults();
+        // If the total == 21 > display 'Blackjack' & the player wins
+        if (player.score == 21) {
+            player.showBlackjack();
+            elementsPlayer.secondPts.style.display = "none";
+            setTimeout(() => {
+                dealerOpen();
+                showResults();
+            }, 800);
         }
-        // If hand includes A & one exceeds 21 > remove it
-        else if (player.secondScore > 21) {
-            textOr.style.display = "none";
-            playerSecondPts.style.display = "none";
+        // If the total exceeds 21 > display 'Bust & the player loses
+        else if (player.score > 21) {
+            player.showBust();
+            setTimeout(() => {
+                dealerOpen();
+                showResults();
+            }, 800);
         }
-    }
+
+        if (elementsPlayer.secondPts.style.display == "inline-block") {
+            // If hand includes A & the second Score == 21 > display 'Blackjack'
+            if (player.secondScore == 21) {
+                player.showBlackjack();
+                elementsPlayer.pts.style.display = "none";
+                dealerOpen();
+                showResults();
+            }
+            // If hand includes A & one exceeds 21 > remove it
+            else if (player.secondScore > 21) {
+                elementsPlayer.or.style.display = "none";
+                elementsPlayer.secondPts.style.display = "none";
+            }
+        }
+    }, 800);
 });
 
 // When the player clicks the 'Stand' button
 // > Show the results div
+// Need 4 timeframes - 1. opencard 2. initial score 3. get cards one at a time 4. show score
 btnStand.addEventListener("click", function () {
     audioClick.play();
-    playerEnd();
+    // #1 - #4
+    dealerOpen();
 
     // If the hand has A & secondScore < 21
     if (
-        playerSecondPts.style.display == "inline-block" &&
+        elementsPlayer.secondPts.style.display == "inline-block" &&
         player.secondScore < 21
     ) {
-        playerPts.style.display = "none";
-        textOr.style.display = "none";
+        elementsPlayer.pts.style.display = "none";
+        elementsPlayer.or.style.display = "none";
     }
 
+    // #5
     showResults();
 });
 
+// Audio Event Listeners
 btnPlayAgain.addEventListener("click", function (e) {
     audioClick.play();
     e.preventDefault;
@@ -518,17 +520,13 @@ btnPlayAgain.addEventListener("click", function (e) {
 
 btnHome.addEventListener("click", function () {
     audioClick.play();
-    startPage.style.display = "block";
+    startPage.style.display = "flex";
     gamePage.style.display = "none";
 });
 
 btnEogHome.addEventListener("click", function () {
     audioClick.play();
     results.style.display = "none";
-    startPage.style.display = "block";
+    startPage.style.display = "flex";
     gamePage.style.display = "none";
 });
-
-// Bug found:
-// Duplicated cards displayed
-// Issues when hands have A (ex. dealercard)
