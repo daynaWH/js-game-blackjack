@@ -18,12 +18,14 @@ const eogMsg = document.getElementById("player-message");
 const btnPlayAgain = document.getElementById("btn-play-again");
 const btnEogHome = document.getElementById("btn-eog-main");
 
-// Audio
-const audioClick = new Audio("audio/click.mp3");
-const audioFlipCard = new Audio("audio/flipcard.mp3");
-const audioBlackjack = new Audio("audio/blackjack.mp3");
-const audioBust = new Audio("audio/bust.mp3");
-const audioEog = new Audio("audio/eog.mp3");
+// Audio Object
+const audio = {
+    click: new Audio("audio/click.mp3"),
+    flipCard: new Audio("audio/flipcard.mp3"),
+    blackjack: new Audio("audio/blackjack.mp3"),
+    bust: new Audio("audio/bust.mp3"),
+    eog: new Audio("audio/eog.mp3"),
+};
 
 // Player HTML Elements Object
 const elementsPlayer = {
@@ -41,7 +43,7 @@ const elementsDealer = {
     popup: document.getElementById("dealer-popup"),
 };
 
-//-------- Main --------//
+//-------- Main (Objects/Methods/Functions)--------//
 
 const tenPts = ["0", "j", "q", "k"];
 
@@ -121,7 +123,7 @@ class Player {
             newBack.classList.add("card-back");
 
             setTimeout(() => {
-                audioFlipCard.play();
+                audio.flipCard.play();
                 cardsInHand.appendChild(newImg);
                 cardsInHand.appendChild(newBack);
                 setTimeout(() => {
@@ -173,7 +175,7 @@ class Player {
         cardsInHand.appendChild(newBack);
 
         await new Promise((resolve) => setTimeout(resolve, 100));
-        audioFlipCard.play();
+        audio.flipCard.play();
         newBack.classList.add("flip");
         newImg.classList.add("flip");
     }
@@ -207,7 +209,7 @@ class Player {
         document.getElementById(`${this.role}-or`).style.display = "none";
 
         await new Promise((resolve) => setTimeout(resolve, 300));
-        audioBlackjack.play();
+        audio.blackjack.play();
         document.getElementById(`${this.role}-popup`).style.display = "block";
         document.getElementById(`${this.role}-popup`).style.backgroundColor =
             "black";
@@ -219,8 +221,8 @@ class Player {
 
     // Bust - Function when the score exceeds 21
     async showBust() {
-        await new Promise((resolve) => setTimeout(resolve, 300)); //the promise resolves after 30 seconds
-        audioBust.play();
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        audio.bust.play();
         document.getElementById(`${this.role}-popup`).style.display = "block";
         document.getElementById(`${this.role}-popup`).style.backgroundColor =
             "red";
@@ -269,7 +271,7 @@ async function startGame() {
     dealer.initialScore();
     btnEnabled();
 
-    // If player has blackjack, end the game
+    // If player has blackjack -> end the game
     if (player.secondScore === 21) {
         elementsPlayer.pts.style.display = "none";
         await player.showBlackjack();
@@ -284,7 +286,7 @@ async function dealerOpen() {
     btnDisabled();
 
     // The dealer opens the second card & score is displayed
-    audioFlipCard.play();
+    audio.flipCard.play();
     document.getElementById("card-back-dealer2").style.display = "none";
 
     if (dealer.hand[0].slice(-1) === "a" || dealer.hand[1].slice(-1) === "a") {
@@ -310,7 +312,7 @@ async function dealerOpen() {
         (elementsDealer.secondPts.style.display === "inline-block" &&
             dealer.secondScore < 17)
     ) {
-        await new Promise((resolve) => setTimeout(resolve, 800)); //the promise resolves after 30 seconds
+        await new Promise((resolve) => setTimeout(resolve, 800));
         dealer.getCard();
         elementsDealer.pts.innerHTML = dealer.addScore();
 
@@ -347,27 +349,24 @@ async function dealerOpen() {
 
 // Win
 async function win() {
-    console.log("win");
     await new Promise((resolve) => setTimeout(resolve, 800));
-    audioEog.play();
+    audio.eog.play();
     results.style.display = "block";
     eogMsg.textContent = "You Win!";
 }
 
 // Lose
 async function lose() {
-    console.log("lose");
     await new Promise((resolve) => setTimeout(resolve, 800));
-    audioEog.play();
+    audio.eog.play();
     results.style.display = "block";
     eogMsg.textContent = "You Lose!";
 }
 
 // Tie
 async function tie() {
-    console.log("tie");
     await new Promise((resolve) => setTimeout(resolve, 800));
-    audioEog.play();
+    audio.eog.play();
     results.style.display = "block";
     eogMsg.textContent = "It's a Tie!";
 }
@@ -445,12 +444,12 @@ async function showResults() {
 const dealer = new Player("dealer");
 const player = new Player("player");
 
-// Event Listeners
+//-------- Event Listeners --------//
 
 // The player clicks the 'Start' button -> start the game
 btnStart.addEventListener("click", function (e) {
     e.preventDefault;
-    audioClick.play();
+    audio.click.play();
     startPage.style.display = "none";
     gamePage.style.display = "grid";
 
@@ -459,11 +458,10 @@ btnStart.addEventListener("click", function (e) {
 
 // The player clicks the 'Hit' button -> add a card to the player hand and add the total point
 btnHit.addEventListener("click", function () {
-    audioClick.play();
+    audio.click.play();
     player.getCard();
     setTimeout(async () => {
         elementsPlayer.pts.innerHTML = player.addScore();
-        console.log(deck.newDeck[0], dealer.hand, player.hand); //testing
 
         // If the total === 21 -> display 'Blackjack' & the player wins
         if (player.score === 21) {
@@ -499,7 +497,7 @@ btnHit.addEventListener("click", function () {
 
 // The player clicks the 'Stand' button -> dealer plays -> show the results
 btnStand.addEventListener("click", async function () {
-    audioClick.play();
+    audio.click.play();
 
     // If the hand has A & secondScore is less than 21 -> display the second score
     if (
@@ -516,24 +514,20 @@ btnStand.addEventListener("click", async function () {
 
 // The player clicks the 'Play Again' button -> restart the game
 btnPlayAgain.addEventListener("click", function (e) {
-    audioClick.play();
+    audio.click.play();
     e.preventDefault;
     results.style.display = "none";
 
     startGame();
 });
 
-// The player clicks the 'Home' button while in game -> display the main start page
-btnHome.addEventListener("click", function () {
-    audioClick.play();
-    startPage.style.display = "flex";
-    gamePage.style.display = "none";
-});
+// The player clicks the 'Home' button in game or in the eog -> display the main start page
+btnHome.addEventListener("click", goHome);
+btnEogHome.addEventListener("click", goHome);
 
-// The player clicks the 'Home' button in the eog -> display the main start page
-btnEogHome.addEventListener("click", function () {
-    audioClick.play();
-    results.style.display = "none";
+function goHome() {
+    audio.click.play();
     startPage.style.display = "flex";
     gamePage.style.display = "none";
-});
+    results.style.display = "none";
+}
