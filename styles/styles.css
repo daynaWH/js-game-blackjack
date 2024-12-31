@@ -1,0 +1,479 @@
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Generic (CALLED IN NORMALIZE-FWD.CSS)
+	- Normalize
+	- Box sizing
+	- Media width
+# Base
+	- Typography
+	- Elements
+# Components
+	- Start Page
+	- In Game
+    - EOG
+	- Footer
+# Media Query
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+# Base
+--------------------------------------------------------------*/
+
+html {
+    background: url("../images/background.jpg") fixed center;
+    background-size: cover;
+}
+
+body {
+    margin: 0;
+    color: rgb(255, 255, 255);
+    font-family: "Orbitron", sans-serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.5;
+}
+
+/* Typography
+--------------------------------------------- */
+
+h1,
+h2 {
+    text-transform: uppercase;
+    margin: 0;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+footer p {
+    font-family: "Play", sans-serif;
+    font-size: 1rem;
+}
+
+/* Elements
+--------------------------------------------- */
+
+button {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    padding: 10px;
+    border: double 5px rgb(0, 128, 0);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    color: rgb(0, 128, 0);
+}
+
+button:disabled {
+    background-color: rgb(169, 169, 169);
+    cursor: wait;
+}
+
+/*--------------------------------------------------------------
+# Components
+--------------------------------------------------------------*/
+
+.start-page,
+.in-game {
+    height: 85vh;
+    max-width: 80%;
+    margin: 3rem auto;
+    background-color: rgba(51, 100, 56, 0.95);
+    border: ridge 1.5rem rgb(80, 30, 30);
+    border-radius: 1rem;
+}
+
+/* Start Page 
+--------------------------------------------- */
+
+.start-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.dealer {
+    width: 15rem;
+}
+
+.title {
+    text-shadow: 3px 3px 8px red;
+}
+
+@keyframes button-text {
+    from {
+        color: rgb(255, 255, 255);
+    }
+    to {
+        color: rgb(255, 255, 255, 0.5);
+    }
+}
+
+.start-page button {
+    box-shadow: 0 15px rgb(93, 66, 31, 0.8);
+    animation: 0.5s infinite alternate button-text;
+}
+
+.start-page button:hover {
+    font-weight: 600;
+    animation-play-state: paused;
+    animation-iteration-count: initial;
+}
+
+.start-page button:active {
+    box-shadow: 0 5px rgb(93, 66, 31);
+    translate: 0 3px;
+}
+
+/* In-Game 
+--------------------------------------------- */
+
+.in-game {
+    display: none;
+    position: relative;
+    grid-template-rows: repeat(2, 1fr) 5rem;
+    overflow: hidden;
+}
+
+.in-game img {
+    width: 8rem;
+    position: absolute;
+    z-index: 1;
+}
+
+.dealer-hand,
+.player-hand {
+    display: grid;
+    grid-template-columns: 20% auto 18rem;
+    align-items: center;
+}
+
+.dealer-hand p,
+.player-hand p {
+    text-align: end;
+}
+
+.col-cards {
+    position: relative;
+    grid-column: 2 / 3;
+}
+
+.dealer-hand .col-cards {
+    grid-row: 1 / 2;
+}
+
+.game-controls {
+    display: none;
+    grid-row: 3 / 4;
+    justify-self: center;
+    align-self: center;
+}
+
+.button-flex {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* -------- Points --------- */
+
+.dealer-points,
+.player-points {
+    font-size: 1.7rem;
+    position: relative;
+    grid-column: 3 / 4;
+}
+
+.dealer-points img {
+    width: 1.5rem;
+}
+
+.or,
+.second-pts {
+    display: none;
+}
+
+.popup {
+    display: none;
+    position: absolute;
+    right: 5rem;
+    bottom: 2.5rem;
+    font-family: "Play", sans-serif;
+    font-size: 1.5rem;
+    background-color: transparent;
+    padding: 0 0.8rem;
+    border: solid rgb(255, 0, 0);
+    border-radius: 5rem;
+    transform: rotate(10deg);
+}
+
+/* -------- Card animation --------- */
+
+img.card-front {
+    transform: rotateY(180deg);
+    transition: transform 2s;
+    backface-visibility: hidden;
+}
+
+img.card-front.flip {
+    transform: rotateY(360deg);
+}
+
+img.card-back {
+    right: -200%;
+    transition: right 0.5s ease, transform 2s;
+}
+
+img.card-back.flip {
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+/* -------- Card Position --------- */
+
+/* First Card */
+img:first-of-type,
+img:nth-of-type(2).flip {
+    right: 70%;
+    top: -6rem;
+}
+
+/* Second card */
+img:nth-of-type(3),
+img:nth-of-type(4).flip {
+    right: 60%;
+    top: -5.5rem;
+}
+
+/* Dealer's Second Card - Back */
+.dealer-hand img:nth-of-type(4).flip {
+    backface-visibility: visible;
+}
+
+/* Third card */
+img:nth-of-type(5),
+img:nth-of-type(6).flip {
+    right: 50%;
+    top: -5rem;
+}
+
+/* Fourth card */
+img:nth-of-type(7),
+img:nth-of-type(8).flip {
+    right: 40%;
+    top: -4.5rem;
+}
+
+/* Fifth card */
+img:nth-of-type(9),
+img:nth-of-type(10).flip {
+    right: 30%;
+    top: -4rem;
+}
+
+/* Sixth card */
+img:nth-of-type(11),
+img:nth-of-type(12).flip {
+    right: 20%;
+    top: -3.5rem;
+}
+
+/* EOG
+--------------------------------------------- */
+
+@keyframes pop {
+    from {
+        font-size: 1.4rem;
+    }
+    to {
+        font-size: 1.5rem;
+    }
+}
+
+.results {
+    display: none;
+    position: absolute;
+    top: 35%;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 2rem 5rem;
+    text-align: center;
+    z-index: 10;
+    color: rgb(0, 0, 0);
+    background-image: linear-gradient(180deg, white, rgb(110, 110, 110));
+    border: solid 5px;
+    border-radius: 1rem;
+    animation: 0.6s infinite alternate pop;
+}
+
+.results button {
+    margin-top: 0.5rem;
+}
+
+/* Footer
+--------------------------------------------- */
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    background-color: rgb(0, 0, 0);
+}
+
+/*--------------------------------------------------------------
+# Media Query
+--------------------------------------------------------------*/
+
+/* Screen Size less than 87.5em (1400px) */
+
+@media (max-width: 87.5em) {
+    .in-game img {
+        width: 7rem;
+    }
+}
+
+/* Screen Size less than 75em (1200px) */
+
+@media (max-width: 75em) {
+    .dealer-hand,
+    .player-hand {
+        grid-template-columns: 20% auto 30%;
+    }
+
+    .popup {
+        right: 10%;
+    }
+
+    /* First Card */
+    img:first-of-type,
+    img:nth-of-type(2).flip {
+        right: 60%;
+    }
+
+    /* Second card */
+    img:nth-of-type(3),
+    img:nth-of-type(4).flip {
+        right: 50%;
+    }
+
+    /* Third card */
+    img:nth-of-type(5),
+    img:nth-of-type(6).flip {
+        right: 40%;
+    }
+
+    /* Fourth card */
+    img:nth-of-type(7),
+    img:nth-of-type(8).flip {
+        right: 30%;
+    }
+
+    /* Fifth card */
+    img:nth-of-type(9),
+    img:nth-of-type(10).flip {
+        right: 20%;
+    }
+
+    /* Sixth card */
+    img:nth-of-type(11),
+    img:nth-of-type(12).flip {
+        right: 10%;
+    }
+}
+
+/* Screen Size less than 50em (800px) */
+
+@media (max-width: 50em) {
+    .start-page {
+        justify-content: center;
+    }
+
+    .dealer {
+        width: 10rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 1rem;
+        margin: 0.5rem;
+    }
+
+    .dealer-points,
+    .player-points {
+        font-size: 1.5rem;
+    }
+
+    button {
+        padding: 5px;
+    }
+}
+
+/* Screen Size less than 30em (480px) */
+
+@media (max-width: 30em) {
+    .in-game img {
+        width: 5rem;
+    }
+
+    .in-game {
+        grid-template-rows: repeat(2, 1fr) 3rem;
+        justify-items: center;
+    }
+
+    button,
+    .dealer-points,
+    .player-points,
+    .popup {
+        font-size: 1rem;
+    }
+
+    .dealer-hand,
+    .player-hand {
+        grid-template-rows: 5rem auto;
+        grid-template-columns: 30% auto;
+        justify-self: stretch;
+    }
+
+    .dealer-hand p,
+    .player-hand p {
+        justify-self: center;
+    }
+
+    .dealer-hand .col-cards,
+    .player-hand .col-cards {
+        grid-row: 2 / 3;
+        grid-column: 1 / 4;
+    }
+
+    .popup {
+        position: relative;
+        width: fit-content;
+        padding: 0 0.5rem;
+        right: -3rem;
+        top: 0rem;
+    }
+
+    @keyframes pop {
+        from {
+            font-size: 0.9rem;
+        }
+        to {
+            font-size: 1rem;
+        }
+    }
+}
