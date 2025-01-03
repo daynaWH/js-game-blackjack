@@ -70,9 +70,6 @@ class Player {
 
         this.scoreEl = {
             pts: document.getElementById(`${this.role}-pts-value-one`),
-            ptsNo: (document.getElementById(
-                `${this.role}-pts-value-one`
-            ).style.display = "inline-block"),
             secondPts: document.getElementById(`${this.role}-pts-value-two`),
             or: document.getElementById(`${this.role}-or`),
             popup: document.getElementById(`${this.role}-popup`),
