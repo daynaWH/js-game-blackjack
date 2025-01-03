@@ -27,22 +27,6 @@ const audio = {
     eog: new Audio("audio/eog.mp3"),
 };
 
-// Player HTML Elements Object
-const elementsPlayer = {
-    pts: document.getElementById("player-pts-value-one"),
-    secondPts: document.getElementById("player-pts-value-two"),
-    or: document.getElementById("player-or"),
-    popup: document.getElementById("player-popup"),
-};
-
-// Dealer HTML Elements Object
-const elementsDealer = {
-    pts: document.getElementById("dealer-pts-value-one"),
-    secondPts: document.getElementById("dealer-pts-value-two"),
-    or: document.getElementById("dealer-or"),
-    popup: document.getElementById("dealer-popup"),
-};
-
 //-------- Main (Objects/Methods/Functions)--------//
 
 const tenPts = ["0", "j", "q", "k"];
@@ -82,6 +66,17 @@ class Player {
         this.secondScore = 0;
         this.blackjack;
         this.bust;
+        this.cardsInHand = document.getElementById(`${this.role}-cards`);
+
+        this.scoreEl = {
+            pts: document.getElementById(`${this.role}-pts-value-one`),
+            ptsNo: (document.getElementById(
+                `${this.role}-pts-value-one`
+            ).style.display = "inline-block"),
+            secondPts: document.getElementById(`${this.role}-pts-value-two`),
+            or: document.getElementById(`${this.role}-or`),
+            popup: document.getElementById(`${this.role}-popup`),
+        };
     }
 
     // Default state of each player
@@ -92,19 +87,18 @@ class Player {
         this.blackjack = false;
         this.bust = false;
 
-        document.getElementById(`${this.role}-pts-value-one`).style.display =
-            "inline-block";
-        document.getElementById(`${this.role}-pts-value-two`).style.display =
-            "none";
-        document.getElementById(`${this.role}-or`).style.display = "none";
-        document.getElementById(`${this.role}-popup`).style.display = "none";
-        elementsPlayer.pts.innerHTML = 0;
-        elementsDealer.pts.innerHTML = "🃏";
+        // Default Score Display
+        this.scoreEl.pts.style.display = "inline-block";
+        this.scoreEl.secondPts.style.display = "none";
+        this.scoreEl.or.style.display = "none";
+        this.scoreEl.popup.style.display = "none";
+        player.scoreEl.pts.textContent = "0";
+        dealer.scoreEl.pts.textContent = "🃏";
 
-        const cardsInHand = document.getElementById(`${this.role}-cards`);
-        let countImg = cardsInHand.childElementCount;
+        // Remove all cards in hand
+        let countImg = this.cardsInHand.childElementCount;
         for (let i = 0; i < countImg; i++) {
-            cardsInHand.removeChild(cardsInHand.firstChild);
+            this.cardsInHand.removeChild(this.cardsInHand.firstChild);
         }
     }
 
@@ -112,7 +106,6 @@ class Player {
     initialCards() {
         for (let i = 0; i < 2; i++) {
             this.hand.push(deck.newDeck.shift());
-            const cardsInHand = document.getElementById(`${this.role}-cards`);
             const newImg = document.createElement("img");
             const newBack = document.createElement("img");
             newImg.src = `images/${this.hand[i]}.svg`;
@@ -122,10 +115,12 @@ class Player {
             newBack.id = `card-back-${this.role}${i + 1}`;
             newBack.classList.add("card-back");
 
+            // Referred to the following stackoverflow for appendChild with Animation
+            // https://stackoverflow.com/questions/68143222/trying-to-delay-using-settimeout-in-a-while-loop
             setTimeout(() => {
                 audio.flipCard.play();
-                cardsInHand.appendChild(newImg);
-                cardsInHand.appendChild(newBack);
+                this.cardsInHand.appendChild(newImg);
+                this.cardsInHand.appendChild(newBack);
                 setTimeout(() => {
                     newBack.classList.add("flip");
                     newImg.classList.add("flip");
@@ -145,15 +140,15 @@ class Player {
                 this.score += 1;
                 this.secondScore = this.score + 10;
                 if (player.hand[i].slice(-1) === "a") {
-                    elementsPlayer.or.style.display = "inline-block";
-                    elementsPlayer.secondPts.style.display = "inline-block";
+                    player.scoreEl.or.style.display = "inline-block";
+                    player.scoreEl.secondPts.style.display = "inline-block";
                 }
             } else {
                 this.score += Number(lastDigit);
                 this.secondScore += Number(lastDigit);
             }
         }
-        elementsPlayer.secondPts.textContent = player.secondScore;
+        player.scoreEl.secondPts.textContent = player.secondScore;
         return this.score;
     }
 
@@ -162,7 +157,6 @@ class Player {
     // https://stackoverflow.com/questions/68143222/trying-to-delay-using-settimeout-in-a-while-loop
     async getCard() {
         this.hand.push(deck.newDeck.shift());
-        const cardsInHand = document.getElementById(`${this.role}-cards`);
         const newImg = document.createElement("img");
         const newBack = document.createElement("img");
 
@@ -171,8 +165,8 @@ class Player {
         newBack.src = `images/back.svg`;
         newBack.classList.add("card-back");
 
-        cardsInHand.appendChild(newImg);
-        cardsInHand.appendChild(newBack);
+        this.cardsInHand.appendChild(newImg);
+        this.cardsInHand.appendChild(newBack);
 
         await new Promise((resolve) => setTimeout(resolve, 100));
         audio.flipCard.play();
@@ -189,45 +183,38 @@ class Player {
             } else if (lastDigit === "a") {
                 this.score += 1;
                 this.secondScore = this.score + 10;
-                document.getElementById(`${this.role}-or`).style.display =
-                    "inline-block";
-                document.getElementById(
-                    `${this.role}-pts-value-two`
-                ).style.display = "inline-block";
+                this.scoreEl.or.style.display = "inline-block";
+                this.scoreEl.secondPts.style.display = "inline-block";
             } else {
                 this.score += Number(lastDigit);
                 this.secondScore += Number(lastDigit);
             }
         }
-        document.getElementById(`${this.role}-pts-value-two`).textContent =
-            this.secondScore;
+        this.scoreEl.secondPts.textContent = this.secondScore;
         return this.score;
     }
 
     // BlackJack - Function when the score === 21
     async showBlackjack() {
-        document.getElementById(`${this.role}-or`).style.display = "none";
+        this.blackjack = true;
+        this.scoreEl.or.style.display = "none";
 
         await new Promise((resolve) => setTimeout(resolve, 300));
         audio.blackjack.play();
-        document.getElementById(`${this.role}-popup`).style.display = "block";
-        document.getElementById(`${this.role}-popup`).style.backgroundColor =
-            "black";
-        document.getElementById(`${this.role}-popup`).textContent =
-            "Blackjack!";
-
-        this.blackjack = true;
+        this.scoreEl.popup.style.display = "block";
+        this.scoreEl.popup.style.backgroundColor = "black";
+        this.scoreEl.popup.textContent = "Blackjack!";
     }
 
     // Bust - Function when the score exceeds 21
     async showBust() {
+        this.bust = true;
+
         await new Promise((resolve) => setTimeout(resolve, 300));
         audio.bust.play();
-        document.getElementById(`${this.role}-popup`).style.display = "block";
-        document.getElementById(`${this.role}-popup`).style.backgroundColor =
-            "red";
-        document.getElementById(`${this.role}-popup`).textContent = "Bust!";
-        this.bust = true;
+        this.scoreEl.popup.style.display = "block";
+        this.scoreEl.popup.style.backgroundColor = "red";
+        this.scoreEl.popup.textContent = "Bust!";
     }
 }
 
@@ -267,16 +254,16 @@ async function startGame() {
     // Generate initial scores for both players
     await new Promise((resolve) => setTimeout(resolve, 2500));
 
-    elementsPlayer.pts.innerHTML = player.initialScore();
+    player.scoreEl.pts.textContent = player.initialScore();
     dealer.initialScore();
     btnEnabled();
 
     // If player has blackjack -> end the game
     if (player.secondScore === 21) {
-        elementsPlayer.pts.style.display = "none";
+        player.scoreEl.pts.style.display = "none";
         await player.showBlackjack();
         await dealerOpen();
-        showResults();
+        await showResults();
     }
 }
 
@@ -290,14 +277,14 @@ async function dealerOpen() {
     document.getElementById("card-back-dealer2").style.display = "none";
 
     if (dealer.hand[0].slice(-1) === "a" || dealer.hand[1].slice(-1) === "a") {
-        elementsDealer.secondPts.innerHTML = dealer.secondScore;
-        elementsDealer.or.style.display = "inline-block";
-        elementsDealer.secondPts.style.display = "inline-block";
+        dealer.scoreEl.secondPts.textContent = dealer.secondScore;
+        dealer.scoreEl.or.style.display = "inline-block";
+        dealer.scoreEl.secondPts.style.display = "inline-block";
 
         // if dealer.secondScore is equal or greater than 17 -> dealer holds & game ends
         if (dealer.secondScore >= 17) {
-            elementsDealer.pts.style.display = "none";
-            elementsDealer.or.style.display = "none";
+            dealer.scoreEl.pts.style.display = "none";
+            dealer.scoreEl.or.style.display = "none";
             if (dealer.secondScore === 21) {
                 await dealer.showBlackjack();
             }
@@ -305,27 +292,28 @@ async function dealerOpen() {
         }
     }
 
-    elementsDealer.pts.innerHTML = dealer.score;
+    dealer.scoreEl.pts.textContent = dealer.score;
 
     while (
         dealer.score < 17 ||
-        (elementsDealer.secondPts.style.display === "inline-block" &&
+        (dealer.scoreEl.secondPts.style.display === "inline-block" &&
             dealer.secondScore < 17)
     ) {
         await new Promise((resolve) => setTimeout(resolve, 800));
         dealer.getCard();
-        elementsDealer.pts.innerHTML = dealer.addScore();
+        dealer.scoreEl.pts.textContent = dealer.addScore();
 
-        if (elementsDealer.secondPts.style.display === "inline-block") {
+        if (dealer.scoreEl.secondPts.style.display === "inline-block") {
             if (dealer.secondScore === 21) {
-                elementsDealer.pts.style.display = "none";
+                dealer.scoreEl.pts.style.display = "none";
                 await dealer.showBlackjack();
+                return;
             } else if (dealer.secondScore > 21) {
-                elementsDealer.secondPts.style.display = "none";
-                elementsDealer.or.style.display = "none";
+                dealer.scoreEl.secondPts.style.display = "none";
+                dealer.scoreEl.or.style.display = "none";
             } else if (dealer.secondScore >= 17 && dealer.secondScore < 21) {
-                elementsDealer.pts.style.display = "none";
-                elementsDealer.or.style.display = "none";
+                dealer.scoreEl.pts.style.display = "none";
+                dealer.scoreEl.or.style.display = "none";
                 return;
             }
         }
@@ -347,28 +335,23 @@ async function dealerOpen() {
 
 // Compare both hands - show results at the end
 
-// Win
-async function win() {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    audio.eog.play();
-    results.style.display = "block";
-    eogMsg.textContent = "You Win!";
-}
+// End of Game Results Text
+const eogMsgText = ["It's a Tie!", "You Lose!", "You Win!"];
 
-// Lose
-async function lose() {
+async function eog(result) {
     await new Promise((resolve) => setTimeout(resolve, 800));
     audio.eog.play();
     results.style.display = "block";
-    eogMsg.textContent = "You Lose!";
-}
 
-// Tie
-async function tie() {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    audio.eog.play();
-    results.style.display = "block";
-    eogMsg.textContent = "It's a Tie!";
+    let i;
+    if (result == "tie") {
+        i = 0;
+    } else if (result == "lose") {
+        i = 1;
+    } else if (result == "win") {
+        i = 2;
+    }
+    eogMsg.textContent = eogMsgText[i];
 }
 
 // Function to display eog results pop-up
@@ -380,60 +363,60 @@ async function showResults() {
         (player.blackjack && dealer.blackjack) ||
         (player.bust && dealer.bust)
     ) {
-        await tie();
+        await eog("tie");
         return;
     } else if (
         (!player.blackjack && dealer.blackjack) ||
         (player.bust && !dealer.bust)
     ) {
-        await lose();
+        await eog("lose");
         return;
     } else if (
         (player.blackjack && !dealer.blackjack) ||
         (!player.bust && dealer.bust)
     ) {
-        await win();
+        await eog("win");
         return;
     }
 
     // Results when there's no blackjack or bust
     // If the player doesn't have A or A is greater than 21
-    if (elementsPlayer.secondPts.style.display === "none") {
-        if (elementsDealer.secondPts.style.display === "none") {
+    if (player.scoreEl.secondPts.style.display === "none") {
+        if (dealer.scoreEl.secondPts.style.display === "none") {
             if (player.score === dealer.score) {
-                await tie();
+                await eog("tie");
             } else if (player.score < dealer.score) {
-                await lose();
+                await eog("lose");
             } else if (player.score > dealer.score) {
-                await win();
+                await eog("win");
             }
-        } else if (elementsDealer.secondPts.style.display === "inline-block") {
+        } else if (dealer.scoreEl.secondPts.style.display === "inline-block") {
             if (player.score === dealer.secondScore) {
-                await tie();
+                await eog("tie");
             } else if (player.score < dealer.secondScore) {
-                await lose();
+                await eog("lose");
             } else if (player.score > dealer.secondScore) {
-                await win();
+                await eog("win");
             }
         }
 
         // If the player has A and is less than 21
-    } else if (elementsPlayer.secondPts.style.display === "inline-block") {
-        if (elementsDealer.secondPts.style.display === "none") {
+    } else if (player.scoreEl.secondPts.style.display === "inline-block") {
+        if (dealer.scoreEl.secondPts.style.display === "none") {
             if (player.secondScore === dealer.score) {
-                await tie();
+                await eog("tie");
             } else if (player.secondScore < dealer.score) {
-                await lose();
+                await eog("lose");
             } else if (player.secondScore > dealer.score) {
-                await win();
+                await eog("win");
             }
-        } else if (elementsDealer.secondPts.style.display === "inline-block") {
+        } else if (dealer.scoreEl.secondPts.style.display === "inline-block") {
             if (player.secondScore === dealer.secondScore) {
-                await tie();
+                await eog("tie");
             } else if (player.secondScore < dealer.secondScore) {
-                await lose();
+                await eog("lose");
             } else if (player.secondScore > dealer.secondScore) {
-                await win();
+                await eog("win");
             }
         }
     }
@@ -447,8 +430,7 @@ const player = new Player("player");
 //-------- Event Listeners --------//
 
 // The player clicks the 'Start' button -> start the game
-btnStart.addEventListener("click", function (e) {
-    e.preventDefault;
+btnStart.addEventListener("click", function () {
     audio.click.play();
     startPage.style.display = "none";
     gamePage.style.display = "grid";
@@ -461,11 +443,11 @@ btnHit.addEventListener("click", function () {
     audio.click.play();
     player.getCard();
     setTimeout(async () => {
-        elementsPlayer.pts.innerHTML = player.addScore();
+        player.scoreEl.pts.textContent = player.addScore();
 
         // If the total === 21 -> display 'Blackjack' & the player wins
         if (player.score === 21) {
-            elementsPlayer.secondPts.style.display = "none";
+            player.scoreEl.secondPts.style.display = "none";
             await player.showBlackjack();
             await dealerOpen();
             await showResults();
@@ -478,18 +460,18 @@ btnHit.addEventListener("click", function () {
         }
 
         // If the hand includes A
-        if (elementsPlayer.secondPts.style.display === "inline-block") {
+        if (player.scoreEl.secondPts.style.display === "inline-block") {
             // If the second score is 21 -> display 'Blackjack'
             if (player.secondScore === 21) {
-                elementsPlayer.pts.style.display = "none";
+                player.scoreEl.pts.style.display = "none";
                 await player.showBlackjack();
                 await dealerOpen();
                 await showResults();
             }
             // If the second score exceeds 21 -> remove it
             else if (player.secondScore > 21) {
-                elementsPlayer.or.style.display = "none";
-                elementsPlayer.secondPts.style.display = "none";
+                player.scoreEl.or.style.display = "none";
+                player.scoreEl.secondPts.style.display = "none";
             }
         }
     }, 800);
@@ -501,11 +483,11 @@ btnStand.addEventListener("click", async function () {
 
     // If the hand has A & secondScore is less than 21 -> display the second score
     if (
-        elementsPlayer.secondPts.style.display === "inline-block" &&
+        player.scoreEl.secondPts.style.display === "inline-block" &&
         player.secondScore < 21
     ) {
-        elementsPlayer.pts.style.display = "none";
-        elementsPlayer.or.style.display = "none";
+        player.scoreEl.pts.style.display = "none";
+        player.scoreEl.or.style.display = "none";
     }
 
     await dealerOpen();
@@ -513,9 +495,8 @@ btnStand.addEventListener("click", async function () {
 });
 
 // The player clicks the 'Play Again' button -> restart the game
-btnPlayAgain.addEventListener("click", function (e) {
+btnPlayAgain.addEventListener("click", function () {
     audio.click.play();
-    e.preventDefault;
     results.style.display = "none";
 
     startGame();
