@@ -10,13 +10,12 @@ const btnControls = document.querySelector(".game-controls");
 const btnGameplay = document.querySelectorAll(".game-controls button");
 const btnHit = document.getElementById("btn-hit");
 const btnStand = document.getElementById("btn-stand");
-const btnHome = document.getElementById("btn-main");
+const btnHome = document.querySelectorAll(".btn-home");
+const btnPlayAgain = document.getElementById("btn-play-again");
 
 // EOG
 const results = document.querySelector(".results");
 const eogMsg = document.getElementById("player-message");
-const btnPlayAgain = document.getElementById("btn-play-again");
-const btnEogHome = document.getElementById("btn-eog-main");
 
 // Audio Object
 const audio = {
@@ -500,12 +499,11 @@ btnPlayAgain.addEventListener("click", function () {
 });
 
 // The player clicks the 'Home' button in game or in the eog -> display the main start page
-btnHome.addEventListener("click", goHome);
-btnEogHome.addEventListener("click", goHome);
-
-function goHome() {
-    audio.click.play();
-    startPage.style.display = "flex";
-    gamePage.style.display = "none";
-    results.style.display = "none";
-}
+btnHome.forEach((btn) => {
+    btn.addEventListener("click", function () {
+        audio.click.play();
+        startPage.style.display = "flex";
+        gamePage.style.display = "none";
+        results.style.display = "none";
+    });
+});
