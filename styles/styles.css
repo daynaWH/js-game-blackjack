@@ -10,6 +10,7 @@
 	- Elements
 # Components
 	- Start Page
+    - Rules
 	- In Game
     - EOG
 	- Footer
@@ -48,6 +49,20 @@ h1 {
     font-weight: 600;
 }
 
+.rules {
+    font-size: 1.5rem;
+}
+
+.rules h2 {
+    text-align: center;
+    margin: 1rem;
+}
+
+button:not(#btn-rules) {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+
 footer p {
     font-family: "Play", sans-serif;
     font-size: 1rem;
@@ -57,8 +72,6 @@ footer p {
 --------------------------------------------- */
 
 button {
-    font-size: 1.5rem;
-    text-transform: uppercase;
     color: rgb(255, 255, 255);
     background-color: rgb(0, 0, 0);
     padding: 10px;
@@ -76,12 +89,23 @@ button:disabled {
     cursor: wait;
 }
 
+.button-flex {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.rules button {
+    width: 3.6rem;
+    border-radius: 2rem;
+}
+
 /*--------------------------------------------------------------
 # Components
 --------------------------------------------------------------*/
 
 .start-page,
-.in-game {
+.in-game,
+.rules {
     height: 85vh;
     max-width: 80%;
     margin: 3rem auto;
@@ -93,11 +117,16 @@ button:disabled {
 /* Start Page 
 --------------------------------------------- */
 
-.start-page {
+.start-page,
+.rules {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 2rem;
+}
+
+.start-page {
     text-align: center;
 }
 
@@ -120,6 +149,9 @@ button:disabled {
 
 .start-page button {
     box-shadow: 0 15px rgb(93, 66, 31, 0.8);
+}
+
+.btn-start {
     animation: 0.5s infinite alternate button-text;
 }
 
@@ -132,6 +164,17 @@ button:disabled {
 .start-page button:active {
     box-shadow: 0 5px rgb(93, 66, 31);
     translate: 0 3px;
+}
+
+/* Rules
+--------------------------------------------- */
+
+.rules {
+    display: none;
+}
+
+ul {
+    margin-bottom: 1rem;
 }
 
 /* In-Game 
@@ -176,11 +219,6 @@ button:disabled {
     grid-row: 3 / 4;
     justify-self: center;
     align-self: center;
-}
-
-.button-flex {
-    display: flex;
-    gap: 0.5rem;
 }
 
 /* -------- Points --------- */
@@ -342,6 +380,10 @@ footer {
     .in-game img {
         width: 7rem;
     }
+
+    .rules {
+        font-size: 1.1rem;
+    }
 }
 
 /* Screen Size less than 75em (1200px) */
@@ -420,6 +462,11 @@ footer {
 
     button {
         padding: 5px;
+    }
+
+    /* WIP */
+    .btn-rules {
+        display: none;
     }
 }
 

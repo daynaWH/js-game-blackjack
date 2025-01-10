@@ -3,6 +3,7 @@
 // Game Table
 const startPage = document.querySelector(".start-page");
 const gamePage = document.querySelector(".in-game");
+const rulesPage = document.querySelector(".rules");
 
 // Buttons
 const btnStart = document.getElementById("btn-start");
@@ -12,6 +13,7 @@ const btnHit = document.getElementById("btn-hit");
 const btnStand = document.getElementById("btn-stand");
 const btnHome = document.querySelectorAll(".btn-home");
 const btnPlayAgain = document.getElementById("btn-play-again");
+const btnRules = document.getElementById("btn-rules");
 
 // EOG
 const results = document.querySelector(".results");
@@ -505,5 +507,13 @@ btnHome.forEach((btn) => {
         startPage.style.display = "flex";
         gamePage.style.display = "none";
         results.style.display = "none";
+        rulesPage.style.display = "none";
     });
+});
+
+btnRules.addEventListener("click", function () {
+    audio.click.play();
+    startPage.style.display = "none";
+    gamePage.style.display = "none";
+    rulesPage.style.display = "flex";
 });
